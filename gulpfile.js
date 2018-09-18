@@ -32,7 +32,7 @@ gulp.task('browser-sync', ['sass', 'img', 'jekyll-build'], function() {
 
 // Compile files
 gulp.task('sass', function () {
-    return gulp.src('assets/css/scss/main.scss')
+    return gulp.src('assets/css/sass/main.scss')
         .pipe(sass({
             outputStyle: 'expanded',
             onError: browserSync.notify
@@ -58,7 +58,7 @@ gulp.task('img', function() {
 
 // Watch scss, html, img files
 gulp.task('watch', function () {
-    gulp.watch('assets/css/scss/**/*.scss', ['sass']);
+    gulp.watch('assets/css/sass/**/*.scss', ['sass']);
     gulp.watch('assets/js/**/*.js', ['jekyll-rebuild']);
     gulp.watch('assets/img/**/*', ['img']);
     gulp.watch(['*.html', '_layouts/*.html', '_includes/*.html', '_pages/*.html', '_posts/*'], ['jekyll-rebuild']);

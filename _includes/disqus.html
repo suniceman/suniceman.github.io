@@ -1,11 +1,11 @@
 <section class="comment-area">
   <div class="comment-wrapper">
-    {% if site.discus-identifier %}
+    {% if site.discus_identifier %}
     <div id="disqus_thread" class="article-comments"></div>
     <script>
       (function() {
           var d = document, s = d.createElement('script');
-          s.src = '//{{ site.discus-identifier }}.disqus.com/embed.js';
+          s.src = '//{{ site.discus_identifier }}.disqus.com/embed.js';
           s.setAttribute('data-timestamp', +new Date());
           (d.head || d.body).appendChild(s);
       })();
