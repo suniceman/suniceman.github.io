@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>MongoDB 4.0 的新特性——事务（Transactions） - Suniceman - Silence Su</title>
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#311e3e">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#311e3e">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#311e3e">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+  <div class="flex-container">
+  <header class="main-header">
+  <div class="wrapper">
+    <div class="header-flex">
+      <div class="menu-icon-container">
+        <span class="menu-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+      </div>
+      <nav class="main-nav">
+        <span class="menu-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+        <ul>
+          <li><a href="/">文章</a></li>
+          <li><a href="/tags">标签</a></li>
+          <li><a href="/about">关于</a></li>
+        </ul>
+      </nav>
+      <p class="logo"><a href="/">Silence Su</a></p>
+      <div class="search-icon-container">
+        <span class="search-icon"><a><i class="fa fa-search" aria-hidden="true"></i></a></span>
+      </div>
+    </div>
+  </div>
+</header> <!-- End Header -->
+
+  <article class="article-page">
+    <div class="page-image">
+      <div class="cover-image" style="background: url(/assets/img/post-2.jpg) center no-repeat; background-size: cover;"></div>
+    </div>
+    <div class="wrapper">
+      <div class="page-content">
+        <div class="header-page">
+          <h1 class="page-title">MongoDB 4.0 的新特性——事务（Transactions）</h1>
+          <div class="page-date"><time datetime="2018-10-01 18:32:20 +0800">2018, Oct 01</time></div>
+        </div>
+        <h2 id="前言">前言</h2>
+
+<p>相信使用过主流的关系型数据库的朋友对“事务（Transactions）”不会太陌生，它可以让我们把对多张表的多次数据库操作整合为一次原子操作，这在高并发场景下可以保证多个数据操作之间的互不干扰；并且一旦在这些操作过程任一环节中出现了错误，事务会中止并且让数据回滚，这使得同时在多张表中修改数据的时候保证了数据的一致性。</p>
+
+<p>以前 MongoDB 是不支持事务的，因此开发者在需要用到事务的时候，不得不借用其他工具，在业务代码层面去弥补数据库的不足。随着 4.0 版本的发布，MongoDB 也为我们带来了原生的事务操作，下面就让我们一起来认识它，并通过简单的例子了解如何去使用。</p>
+
+<h2 id="介绍">介绍</h2>
+
+<h3 id="事务和副本集replica-sets">事务和副本集（Replica Sets）</h3>
+
+<p>副本集是 MongoDB 的一种主副节点架构，它使数据得到最大的可用性，避免单点故障引起的整个服务不能访问的情况的发生。目前 MongoDB 的多表事务操作仅支持在副本集上运行，想要在本地环境安装运行副本集可以借助一个工具包——run-rs，以下的文章中有详细的使用说明：</p>
+
+<blockquote>
+  <p><a href="https://thecodebarbarian.com/introducing-run-rs-zero-config-mongodb-runner.html">https://thecodebarbarian.com/introducing-run-rs-zero-config-mongodb-runner.html</a></p>
+</blockquote>
+
+<h3 id="事务和会话sessions">事务和会话（Sessions）</h3>
+
+<p>事务和会话（Sessions）关联，一个会话同一时刻只能开启一个事务操作，当一个会话断开，这个会话中的事务也会结束</p>
+
+<h3 id="事务中的函数">事务中的函数</h3>
+<blockquote>
+  <p>Session.startTransaction()</p>
+</blockquote>
+
+<p>提交事务，将事务中对数据的修改进行保存，然后结束当前事务，一次事务在提交之前的数据操作对外都是不可见的。</p>
+<blockquote>
+  <p>Session.abortTransaction()</p>
+</blockquote>
+
+<p>中止当前的事务，并将事务中执行过的数据修改回滚。</p>
+
+<h3 id="重试">重试</h3>
+<p>当事务运行中报错，catch 到的错误对象中会包含一个属性名为 errorLabels 的数组，当这个数组中包含以下2个元素的时候，代表我们可以重新发起相应的事务操作。</p>
+<blockquote>
+  <p>TransientTransactionError：出现在事务开启以及随后的数据操作阶段
+UnknownTransactionCommitResult：出现在提交事务阶段</p>
+</blockquote>
+
+<h2 id="示例">示例</h2>
+<p>经过上面的铺垫，你是不是已经迫不及待想知道究竟应该怎么写代码去完成一次完整的事务操作？下面我们就简单写一个例子：</p>
+
+<p>场景描述：  假设一个交易系统中有2张表——记录商品的名称、库存数量等信息的表 commodities，和记录订单的表 orders。当用户下单的时候，首先要找到 commodities 表中对应的商品，判断库存数量是否满足该笔订单的需求，是的话则减去相应的值，然后在 orders 表中插入一条订单数据。在高并发场景下，可能在查询库存数量和减少库存的过程中，又收到了一次新的创建订单请求，这个时候可能就会出问题，因为新的请求在查询库存的时候，上一次操作还未完成减少库存的操作，这个时候查询到的库存数量可能是充足的，于是开始执行后续的操作，实际上可能上一次操作减少了库存后，库存的数量就已经不足了，于是新的下单请求可能就会导致实际创建的订单数量超过库存数量。</p>
+
+<p>以往要解决这个问题，我们可以用给商品数据“加锁”的方式，比如基于 Redis 的各种锁，同一时刻只允许一个订单操作一个商品数据，这种方案能解决问题，缺点就是代码更复杂了，并且性能会比较低。如果用数据库事务的方式就可以简洁很多</p>
+
+<p>commodities 表数据（stock 为库存）：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd69319a"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"灭霸原味手套"</span><span class="p">,</span><span class="w"> </span><span class="s2">"stock"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd693198"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"雷神专用铁锤"</span><span class="p">,</span><span class="w"> </span><span class="s2">"stock"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>orders 表数据：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af07daa051d92f02462644c"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"commodity"</span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd69319a"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af07daa051d92f02462644b"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"commodity"</span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd693198"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>通过一次事务完成创建订单操作（mongo Shell）：</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 执行 txnFunc 并且在遇到 TransientTransactionError 的时候重试</span>
+<span class="kd">function</span> <span class="nx">runTransactionWithRetry</span><span class="p">(</span><span class="nx">txnFunc</span><span class="p">,</span> <span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">txnFunc</span><span class="p">(</span><span class="nx">session</span><span class="p">);</span> <span class="c1">// 执行事务</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">'errorLabels'</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">errorLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">'TransientTransactionError'</span><span class="p">)</span>
+      <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">print</span><span class="p">(</span><span class="s1">'TransientTransactionError, retrying transaction ...'</span><span class="p">);</span>
+        <span class="k">continue</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 提交事务并且在遇到 UnknownTransactionCommitResult 的时候重试</span>
+<span class="kd">function</span> <span class="nx">commitWithRetry</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">commitTransaction</span><span class="p">();</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s1">'Transaction committed.'</span><span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">'errorLabels'</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">errorLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">'UnknownTransactionCommitResult'</span><span class="p">)</span>
+      <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">print</span><span class="p">(</span><span class="s1">'UnknownTransactionCommitResult, retrying commit operation ...'</span><span class="p">);</span>
+        <span class="k">continue</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">print</span><span class="p">(</span><span class="s1">'Error during commit ...'</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 在一次事务中完成创建订单操作</span>
+<span class="kd">function</span> <span class="nx">createOrder</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">commoditiesCollection</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getDatabase</span><span class="p">(</span><span class="s1">'mall'</span><span class="p">).</span><span class="nx">commodities</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">ordersCollection</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getDatabase</span><span class="p">(</span><span class="s1">'mall'</span><span class="p">).</span><span class="nx">orders</span><span class="p">;</span>
+  <span class="c1">// 假设该笔订单中商品的数量</span>
+  <span class="kd">var</span> <span class="nx">orderAmount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="c1">// 假设商品的ID</span>
+  <span class="kd">var</span> <span class="nx">commodityID</span> <span class="o">=</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s1">'5af0776263426f87dd69319a'</span><span class="p">);</span>
+
+  <span class="nx">session</span><span class="p">.</span><span class="nx">startTransaction</span><span class="p">({</span>
+    <span class="na">readConcern</span><span class="p">:</span> <span class="p">{</span> <span class="na">level</span><span class="p">:</span> <span class="s1">'snapshot'</span> <span class="p">},</span>
+    <span class="na">writeConcern</span><span class="p">:</span> <span class="p">{</span> <span class="na">w</span><span class="p">:</span> <span class="s1">'majority'</span> <span class="p">},</span>
+  <span class="p">});</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="p">{</span> <span class="nx">stock</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">commoditiesCollection</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span> <span class="na">_id</span><span class="p">:</span> <span class="nx">commodityID</span> <span class="p">});</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">stock</span> <span class="o">&lt;</span> <span class="nx">orderAmount</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s1">'Stock is not enough'</span><span class="p">);</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">abortTransaction</span><span class="p">();</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Stock is not enough'</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">commoditiesCollection</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+      <span class="p">{</span> <span class="na">_id</span><span class="p">:</span> <span class="nx">commodityID</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">$inc</span><span class="p">:</span> <span class="p">{</span> <span class="na">stock</span><span class="p">:</span> <span class="o">-</span><span class="nx">orderAmount</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">);</span>
+    <span class="nx">ordersCollection</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span>
+      <span class="na">commodity</span><span class="p">:</span> <span class="nx">commodityID</span><span class="p">,</span>
+      <span class="na">amount</span><span class="p">:</span> <span class="nx">orderAmount</span><span class="p">,</span>
+    <span class="p">});</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s1">'Caught exception during transaction, aborting.'</span><span class="p">);</span>
+    <span class="nx">session</span><span class="p">.</span><span class="nx">abortTransaction</span><span class="p">();</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">commitWithRetry</span><span class="p">(</span><span class="nx">session</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 发起一次会话</span>
+<span class="kd">var</span> <span class="nx">session</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getMongo</span><span class="p">().</span><span class="nx">startSession</span><span class="p">({</span> <span class="na">readPreference</span><span class="p">:</span> <span class="p">{</span> <span class="na">mode</span><span class="p">:</span> <span class="s1">'primary'</span> <span class="p">}</span> <span class="p">});</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nx">runTransactionWithRetry</span><span class="p">(</span><span class="nx">createOrder</span><span class="p">,</span> <span class="nx">session</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// 错误处理</span>
+<span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+  <span class="nx">session</span><span class="p">.</span><span class="nx">endSession</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>上面的代码看着感觉很多，其实 runTransactionWithRetry 和 commitWithRetry 这两个函数都是可以抽离出来成为公共函数的，不需要每次操作都重复书写。用上了事务之后，因为事务中的数据操作都是一次原子操作，所以我们就不需要考虑分布并发导致的数据一致性的问题，是不是感觉简单了许多？</p>
+
+<p>你可能注意到了，代码中在执行 startTransaction 的时候设置了两个参数——readConcern 和 writeConcern，这是 MongoDB 读写操作的确认级别，在这里用于在副本集中平衡数据读写操作的可靠性和性能，如果在这里展开就太多了，所以感兴趣的朋友建议去阅读官方文档了解一下：</p>
+
+<blockquote>
+  <p>readConcern： <a href="https://docs.mongodb.com/master/reference/read-concern/">https://docs.mongodb.com/master/reference/read-concern/</a></p>
+</blockquote>
+
+<blockquote>
+  <p>writeConcern： <a href="https://docs.mongodb.com/master/reference/write-concern/">https://docs.mongodb.com/master/reference/write-concern/</a></p>
+</blockquote>
+
+
+        <div class="page-footer">
+          <div class="page-tag">
+            <span>Tags:</span>
+            
+            <a href="/tags#mongodb" class="tag">| mongodb</a>
+            
+          </div><!-- End Tags -->
+        </div>
+        <div class="recent-box">
+  <h2 class="recent-title">最新发布</h2>
+  <div class="recent-list">
+    
+      
+        <a href="/%E5%BE%81%E5%A9%9A%E5%90%AF%E4%BA%8B/" class="recent-item" style="background: url(/assets/img/zhangpan.jpg) center no-repeat; background-size: cover;"><span>征婚启事</span></a>
+      
+    
+      
+        <a href="/MongoDB%E4%BA%8B%E5%8A%A1/" class="recent-item" style="background: url(/assets/img/post-2.jpg) center no-repeat; background-size: cover;"><span>MongoDB 4.0 的新特性——事务（Transactions）</span></a>
+      
+    
+      
+        <a href="/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="recent-item" style="background: url(/assets/img/post-1.jpg) center no-repeat; background-size: cover;"><span>消息队列MQ</span></a>
+      
+    
+      
+        <a href="/ElasticSearch/" class="recent-item" style="background: url(/assets/img/post-4.jpg) center no-repeat; background-size: cover;"><span>ElasticSearch 安装</span></a>
+      
+    
+  </div>
+</div> <!-- End Recent-Box -->
+
+        <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+      </div>
+    </div> <!-- End Wrapper -->
+  </article>
+  <div class="search-box">
+  <div class="wrapper">
+    <div class="search-grid">
+      <form class="search-form">
+        <div id="search-container">
+          <input type="text" id="search-input" class="search" placeholder="Search">
+        </div>
+      </form>
+      <ul id="results-container" class="results-search"></ul>
+      <div class="icon-close-container">
+        <span class="search-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <footer class="main-footer">
+  <div class="copyright">
+    <p>2018 &copy; Silence Su</p>
+  </div>
+</footer> <!-- End Footer -->
+
+</div>
+
+  <!-- JS -->
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jekyll-search.js"></script>
+<script>
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('results-container'),
+    json: '/search.json',
+    searchResultTemplate: '<li><a href="{url}" title="{desc}">{title}</a></li>',
+    noResultsText: 'No results found',
+    fuzzy: false,
+    exclude: ['Welcome']
+  });
+</script>
+<script src="/assets/js/main.js"></script>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>

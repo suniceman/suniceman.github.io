@@ -1,4 +1,4 @@
-title: My personal blog - Silence Su
+title: Suniceman - Silence Su
 email: 13145211216@163.com
 description: > # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -6,12 +6,12 @@ description: > # this means to ignore newlines until "baseurl:"
   Google search results) and in your feed.xml site description.
 permalink: ':title/'
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "http://suniceman.cn" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Author settings
 author: Silence Su # add your name
 author-pic: adam-face.jpg
-about-author: My name is Adam Neilson. I’m a full-time adventure travel blogger and photographer who’s been exploring the world for over 2 years.
+about-author: My name is Silence Su. I’m a full-time backend developer.
 
 # Contact links
 email: 13145211216@163.com
@@ -19,7 +19,7 @@ phone: 13145211216
 website: suniceman.cn
 linkedin: # Add your Linkedin handle
 github: suniceman # Add your Github handle
-twitter: '@artemsheludko_' # Add your Twitter handle
+twitter: '@suniceman' # Add your Twitter handle
 facebook: # Add your Facebook handle
 instagram: # Add your Instagram handle
 pinterest: # Add your Pinterest handle
