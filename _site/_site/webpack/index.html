@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Webpack - Suniceman - Silence Su</title>
+	<meta name="description" content="webpack 是一个模块打包器(module bundler)。打包器(bundler)帮助您取得准备用于部署的 JavaScript 和样式表，将它们转换为适合浏览器的可用格式。">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#311e3e">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#311e3e">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#311e3e">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+  <div class="flex-container">
+  <header class="main-header">
+  <div class="wrapper">
+    <div class="header-flex">
+      <div class="menu-icon-container">
+        <span class="menu-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+      </div>
+      <nav class="main-nav">
+        <span class="menu-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+        <ul>
+          <li><a href="/">文章</a></li>
+          <li><a href="/tags">标签</a></li>
+          <li><a href="/about">关于</a></li>
+        </ul>
+      </nav>
+      <p class="logo"><a href="/">Silence Su</a></p>
+      <div class="search-icon-container">
+        <span class="search-icon"><a><i class="fa fa-search" aria-hidden="true"></i></a></span>
+      </div>
+    </div>
+  </div>
+</header> <!-- End Header -->
+
+  <article class="article-page">
+    <div class="page-image">
+      <div class="cover-image" style="background: url(/assets/img/post-5.jpg) center no-repeat; background-size: cover;"></div>
+    </div>
+    <div class="wrapper">
+      <div class="page-content">
+        <div class="header-page">
+          <h1 class="page-title">Webpack</h1>
+          <div class="page-date"><time datetime="2018-08-21 18:32:20 +0800">2018, Aug 21</time></div>
+        </div>
+        <h2 id="介绍">介绍</h2>
+<p>首先我们要消除一个常见的误解。webpack 是一个模块打包器(module bundler)（例如，Browserify 或 Brunch）。它不是一个任务执行器(task runner)（例如，Make, Grunt 或者 Gulp ）。任务执行器就是用来自动化处理常见的开发任务，例如项目的检查(lint)、构建(build)、测试(test)。相对于打包器(bundler)，任务执行器则聚焦在偏重上层的问题上面。你可以得益于，使用上层的工具，而将打包部分的问题留给 webpack。</p>
+
+<p>打包器(bundler)帮助您取得准备用于部署的 JavaScript 和样式表，将它们转换为适合浏览器的可用格式。例如，JavaScript 可以压缩、拆分 chunk 和懒加载，以提高性能。打包是 web 开发中最重要的挑战之一，解决此问题可以消除开发过程中的大部分痛点。</p>
+
+<h2 id="起步">起步</h2>
+
+<ul>
+  <li>安装
+    <blockquote>
+      <p>$ npm install –save-dev webpack</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>新建webpack.config.js配置文件，并写入以下内容</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">entry</span><span class="p">:</span> <span class="s1">'./src/scripts/app.js'</span><span class="p">,</span>
+      <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
+          <span class="na">filename</span><span class="p">:</span> <span class="s1">'bundle.js'</span><span class="p">,</span>
+          <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'dist/scripts'</span><span class="p">)</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>执行编译
+    <blockquote>
+      <p>$ ./node_modules/.bin/webpack webpack.config.js</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>使用npm脚本来方便启动webpack，在package.json中加入:</p>
+
+    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div>    </div>
+
+    <p>现在，可以使用 npm run build 命令，来替代我们之前用到的较长命令。注意，使用 npm 的 scripts，我们可以通过模块名，来引用本地安装的 npm 包，而不是写出完整路径。这是大多数基于 npm 的项目遵循的标准，允许我们直接调用 webpack，而不是去调用 ./node_modules/.bin/webpack。</p>
+  </li>
+</ul>
+
+<h2 id="资源管理">资源管理</h2>
+
+<p>在 webpack 出现之前，前端开发人员会使用 grunt 和 gulp 等工具来处理资源，并将它们从 <code class="highlighter-rouge">/src</code> 文件夹移动到 <code class="highlighter-rouge">/dist</code> 或 <code class="highlighter-rouge">/build</code> 目录中。同样方式也被用于 JavaScript 模块，但是，像 webpack 这样的工具，将动态打包(dynamically bundle)所有依赖项（创建所谓的依赖图(dependency graph)）。这是极好的创举，因为现在每个模块都可以_明确表述它自身的依赖，我们将避免打包未使用的模块。</p>
+
+<p>webpack 最出色的功能之一就是，除了 JavaScript，还可以通过 loader 引入任何其他类型的文件。也就是说，以上列出的那些 JavaScript 的优点（例如显式依赖），同样可以用来构建网站或 web 应用程序中的所有非 JavaScript 内容。让我们从 CSS 开始起步，或许你可能已经熟悉了这个设置过程。</p>
+
+<hr />
+
+<h3 id="加载css">加载css</h3>
+
+<ul>
+  <li>为了从 JavaScript 模块中 import 一个 CSS 文件，需要安装加载css的插件
+    <blockquote>
+      <p>$ npm install –save-dev style-loader css-loader</p>
+    </blockquote>
+  </li>
+  <li>在 module 配置中 添加 style-loader 和 css-loader
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+      <span class="c1">// 通过匹配不同正则表达式的，调用相应的loader</span>
+      <span class="na">rules</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="c1">// webpack 根据正则表达式，来确定应该查找哪些文件，并将其提供给指定的 loader</span>
+          <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+          <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="s1">'style-loader'</span><span class="p">,</span> <span class="s1">'css-loader'</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>在app.js中通过import引入css文件</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">import</span> <span class="s1">'../styles/app.css'</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="加载图片">加载图片</h3>
+
+<ul>
+  <li>安装读取文件的loader
+    <blockquote>
+      <p>$ npm install –save-dev file-loader</p>
+    </blockquote>
+  </li>
+  <li>在app.js文件中引入图片
+    <blockquote>
+      <p>$ import Icon from ‘../images/th.jpeg’</p>
+    </blockquote>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="加载数据">加载数据</h3>
+
+<ul>
+  <li>安装csv和xml加载器
+    <blockquote>
+      <p>$ npm install –save-dev csv-loader xml-loader</p>
+    </blockquote>
+  </li>
+  <li>配置
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">module</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nl">rules</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.(</span><span class="sr">csv|tsv</span><span class="se">)</span><span class="sr">$/</span><span class="p">,</span>
+        <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="s1">'csv-loader'</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">xml$/</span><span class="p">,</span>
+        <span class="na">use</span><span class="p">:</span> <span class="p">[</span><span class="s1">'xml-loader'</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="管理输出">管理输出</h2>
+
+<ul>
+  <li>html页面自动引入资源</li>
+</ul>
+
+<p>目前，我们在 index.html 文件中手动引入所有资源，然而随着应用程序增长，并且一旦开始对文件名使用哈希(hash)]并输出多个 bundle，手动地对 index.html 文件进行管理，一切就会变得困难起来。然而，可以通过一些插件，会使这个过程更容易操控。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">)</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">entry</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">app</span><span class="p">:</span> <span class="s1">'./src/scripts/app.js'</span><span class="p">,</span>
+    <span class="na">common</span><span class="p">:</span> <span class="s1">'./src/scripts/common.js'</span>
+  <span class="p">},</span>
+  <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">filename</span><span class="p">:</span> <span class="s1">'[name].bundle.js'</span><span class="p">,</span>
+    <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'dist/scripts'</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>当有多个入口文件时，会编译成多个bundle.js文件，每次改动都需要在页面中手动引入。此时，需要用到 `html-webpack-plugin</p>
+
+<blockquote>
+  <p>$ npm install –save-dev html-webpack-plugin</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">HtmlWebpackPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'html-webpack-plugin'</span><span class="p">)</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">entry</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">app</span><span class="p">:</span> <span class="s1">'./src/scripts/app.js'</span><span class="p">,</span>
+    <span class="na">common</span><span class="p">:</span> <span class="s1">'./src/scripts/common.js'</span>
+  <span class="p">},</span>
+  <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">filename</span><span class="p">:</span> <span class="s1">'[name].bundle.js'</span><span class="p">,</span>
+    <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'dist/scripts'</span><span class="p">)</span>
+  <span class="p">},</span>
+  <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+    <span class="k">new</span> <span class="nx">HtmlWebpackPlugin</span><span class="p">({</span>
+      <span class="na">title</span><span class="p">:</span> <span class="s1">'Hi webpack'</span>
+    <span class="p">})</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>清理旧的输出文件</li>
+</ul>
+
+<blockquote>
+  <p>$ npm install clean-webpack-plugin –save-dev</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">CleanWebpackPlugin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'clean-webpack-plugin'</span><span class="p">);</span>
+
+<span class="nl">plugins</span><span class="p">:</span> <span class="p">[</span>
+    <span class="k">new</span> <span class="nx">CleanWebpackPlugin</span><span class="p">([</span><span class="s1">'dist'</span><span class="p">]),</span>
+    <span class="k">new</span> <span class="nx">HtmlWebpackPlugin</span><span class="p">({</span>
+      <span class="na">title</span><span class="p">:</span> <span class="s1">'Hi webpack'</span>
+    <span class="p">})</span>
+  <span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="开发实践">开发实践</h2>
+
+<ul>
+  <li>使用 <code class="highlighter-rouge">source map</code> 定位错误
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="na">devtool</span><span class="p">:</span> <span class="s1">'inline-source-map'</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>使用webpack-dev-server，为你提供了一个简单的 web 服务器，并且能够实时重新加载(live reloading)。</p>
+
+    <blockquote>
+      <p>$ npm install –save-dev webpack-dev-server</p>
+    </blockquote>
+
+    <p>修改配置文件，告诉开发服务器(dev server)，在哪里查找文件</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">devServer</span><span class="p">:</span> <span class="p">{</span>
+          <span class="na">contentBase</span><span class="p">:</span> <span class="s1">'./dist'</span>
+      <span class="p">},</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+    <p>以上配置告知 webpack-dev-server，在 localhost:8080 下建立服务，将 dist 目录下的文件，作为可访问文件。</p>
+
+    <p>在package.json中添加一个脚本配置</p>
+
+    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack-dev-server --open"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="代码分离">代码分离</h2>
+<p>代码分离是 webpack 中最引人注目的特性之一。此特性能够把代码分离到不同的 bundle 中，然后可以按需加载或并行加载这些文件。代码分离可以用于获取更小的 bundle，以及控制资源加载优先级，如果使用合理，会极大影响加载时间。</p>
+
+<p>有三种常用的代码分离方法：</p>
+
+<ul>
+  <li>入口起点：使用 entry 配置手动地分离代码。</li>
+  <li>防止重复：使用 CommonsChunkPlugin 去重和分离 chunk。</li>
+  <li>动态导入：通过模块的内联函数调用来分离代码。</li>
+</ul>
+
+        <div class="page-footer">
+          <div class="page-tag">
+            <span>Tags:</span>
+            
+            <a href="/tags#Javascript" class="tag">| Javascript</a>
+            
+            <a href="/tags#Webpack" class="tag">| Webpack</a>
+            
+          </div><!-- End Tags -->
+        </div>
+        <div class="recent-box">
+  <h2 class="recent-title">最新发布</h2>
+  <div class="recent-list">
+    
+      
+        <a href="/MySQL%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E5%8F%8A%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" class="recent-item" style="background: url(/assets/img/post-3.jpg) center no-repeat; background-size: cover;"><span>MySQL索引原理及慢查询优化</span></a>
+      
+    
+      
+        <a href="/MongoDB%E4%BA%8B%E5%8A%A1/" class="recent-item" style="background: url(/assets/img/post-2.jpg) center no-repeat; background-size: cover;"><span>MongoDB 4.0 的新特性——事务（Transactions）</span></a>
+      
+    
+      
+        <a href="/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="recent-item" style="background: url(/assets/img/post-1.jpg) center no-repeat; background-size: cover;"><span>消息队列MQ</span></a>
+      
+    
+      
+        <a href="/ElasticSearch/" class="recent-item" style="background: url(/assets/img/post-4.jpg) center no-repeat; background-size: cover;"><span>ElasticSearch 安装</span></a>
+      
+    
+  </div>
+</div> <!-- End Recent-Box -->
+
+        <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+      </div>
+    </div> <!-- End Wrapper -->
+  </article>
+  <div class="search-box">
+  <div class="wrapper">
+    <div class="search-grid">
+      <form class="search-form">
+        <div id="search-container">
+          <input type="text" id="search-input" class="search" placeholder="Search">
+        </div>
+      </form>
+      <ul id="results-container" class="results-search"></ul>
+      <div class="icon-close-container">
+        <span class="search-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <footer class="main-footer">
+  <div class="copyright">
+    <p>2018 &copy; Silence Su</p>
+  </div>
+</footer> <!-- End Footer -->
+
+</div>
+
+  <!-- JS -->
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jekyll-search.js"></script>
+<script>
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('results-container'),
+    json: '/search.json',
+    searchResultTemplate: '<li><a href="{url}" title="{desc}">{title}</a></li>',
+    noResultsText: 'No results found',
+    fuzzy: false,
+    exclude: ['Welcome']
+  });
+</script>
+<script src="/assets/js/main.js"></script>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>

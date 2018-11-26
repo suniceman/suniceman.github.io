@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grunt - Suniceman - Silence Su</title>
+	<meta name="description" content="Grunt是一个基于NodeJS，可用于自动化构建、测试、生成文档的项目管理工具。">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#311e3e">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#311e3e">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#311e3e">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+  <div class="flex-container">
+  <header class="main-header">
+  <div class="wrapper">
+    <div class="header-flex">
+      <div class="menu-icon-container">
+        <span class="menu-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+      </div>
+      <nav class="main-nav">
+        <span class="menu-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+        <ul>
+          <li><a href="/">文章</a></li>
+          <li><a href="/tags">标签</a></li>
+          <li><a href="/about">关于</a></li>
+        </ul>
+      </nav>
+      <p class="logo"><a href="/">Silence Su</a></p>
+      <div class="search-icon-container">
+        <span class="search-icon"><a><i class="fa fa-search" aria-hidden="true"></i></a></span>
+      </div>
+    </div>
+  </div>
+</header> <!-- End Header -->
+
+  <article class="article-page">
+    <div class="page-image">
+      <div class="cover-image" style="background: url(/assets/img/post-6.jpg) center no-repeat; background-size: cover;"></div>
+    </div>
+    <div class="wrapper">
+      <div class="page-content">
+        <div class="header-page">
+          <h1 class="page-title">Grunt</h1>
+          <div class="page-date"><time datetime="2018-08-20 18:32:20 +0800">2018, Aug 20</time></div>
+        </div>
+        <h3 id="简介">简介</h3>
+
+<p>Grunt是一个基于NodeJS，可用于自动化构建、测试、生成文档的项目管理工具。</p>
+
+<h3 id="grunt-能做什么">Grunt 能做什么</h3>
+
+<p>Grunt可以自动化我们的整个开发流程，简单地说，就是用JavaScript去执行一些程序来完成一些任务。比如说将css、Javascript、图像等资源压缩；将Sass和Less通过预处理器编译成Css；将Coffeescript、Typescript等转化为Javascript；实时监听文件的变化，并执行自动编译任务；</p>
+
+<p>在Grunt工具箱中，按任务目标我们可以分为：</p>
+
+<ul>
+  <li>编译文档型：比如编译LESS、Sass、Stylus、Coffeescript等；</li>
+  <li>文件操作型：比如说合并、压缩JavaScript、CSS、图片等；</li>
+  <li>质量保障型：比如JSHint、Jasmin、Mocha等；</li>
+  <li>类库构建型：比如说Backbone.js、ember.js、angular.js等。</li>
+</ul>
+
+<p>这些任务都依赖于给Grunt提供的插件来完成的，但很多工作依旧需要在命令终端手工输入命令来完成这些操作。为此在Grunt中可以使用watch任务来实现一些监听文件改变、自动触发构建等功能。从而减少人工去每次操作任务。</p>
+
+<h3 id="开始使用">开始使用</h3>
+
+<p>Grunt的使用非常简单，仅需下载相应的命令行工具，针对不同的任务下载不同的插件，即可完成整个自动化过程。</p>
+
+<ul>
+  <li>
+    <p>将grunt-cli（grunt命令行工具）作为全局模块安装</p>
+
+    <blockquote>
+      <p>$ npm install -g grunt-cli</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>通过npm初始化，为我们生成一份package.json文件</p>
+
+    <blockquote>
+      <p>$ mkdir grunt-app &amp;&amp; cd grunt-app</p>
+    </blockquote>
+
+    <blockquote>
+      <p>$ npm init</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>为项目安装grunt作为依赖</p>
+
+    <blockquote>
+      <p>$ npm install –save-dev grunt</p>
+    </blockquote>
+
+    <p>至此grunt已经安装完毕，但它还没有特殊的功能，要使用grunt的各种功能，需要建一份Gruntfile.js文件，并为之安装相应的插件。</p>
+  </li>
+  <li>
+    <p>新建Gruntfile.js，并写入以下内容</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// 之后所有的配置都是配在传递给grunt.initConfig这个方法的对象中</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+      <span class="c1">// 将package.json文件作为一个json对象读入</span>
+      <span class="na">pkg</span><span class="p">:</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s1">'package.json'</span><span class="p">),</span>
+    <span class="p">});</span>
+
+    <span class="c1">// 加载grunt的插件，这里的 grunt-contrib-uglify 是一个例子</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-uglify'</span><span class="p">);</span>
+
+    <span class="c1">// 注册一个grunt任务，第一个参数为任务的名字，当任务的名字default时，通过grunt运行项目时，会默认执行该任务；第二个参数是一个数组，是后续所要执行任务名字的集合。</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'uglify'</span><span class="p">]);</span>
+  <span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="安装grunt插件">安装grunt插件</h3>
+
+<p>在安装grunt插件时，需要考虑自己需要哪些功能，下面罗列出开发中需要的大部分功能。并举个简单的例子，详细用法可参考 <a href="https://github.com/gruntjs" title="Gruntjs的github链接">Gruntjs</a>。</p>
+
+<ol>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-uglify" title="grunt uglify">grunt-contrib-uglify</a> （混淆并压缩js文件）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-uglify –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="na">uglify</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">my_target</span><span class="p">:</span> <span class="p">{</span>
+          <span class="na">files</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">'dest/output.min.js'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'src/input1.js'</span><span class="p">,</span> <span class="s1">'src/input2.js'</span><span class="p">]</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-uglify'</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-cssmin" title="grunt cssmin">grunt-contrib-cssmin</a> （压缩css）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-cssmin –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+        <span class="na">target</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">files</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s1">'output.css'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'foo.css'</span><span class="p">,</span> <span class="s1">'bar.css'</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-cssmin'</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-clean" title="grunt clean">grunt-contrib-clean</a> （清除文件和目录，一般用来清除上一次编译生成的文件）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-clean –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grunt.initConfig({
+    clean: {
+        build: {
+            src: ['path/to/dir/one', 'path/to/dir/two']
+        }
+    }
+});
+
+grunt.loadNpmTasks('grunt-contrib-clean');
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-watch" title="grunt watch">grunt-contrib-watch</a> （监听文件的变化，并自动执行任务）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-watch –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="na">watch</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">scripts</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">files</span><span class="p">:</span> <span class="p">[</span><span class="s1">'**/*.coffee'</span><span class="p">],</span>
+            <span class="c1">// 监听到文件变化后执行的task</span>
+            <span class="na">tasks</span><span class="p">:</span> <span class="p">[</span><span class="s1">'coffee'</span><span class="p">],</span>
+            <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">spawn</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="na">css</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">files</span><span class="p">:</span> <span class="s1">'**/*.sass'</span><span class="p">,</span>
+            <span class="na">tasks</span><span class="p">:</span> <span class="p">[</span><span class="s1">'sass'</span><span class="p">],</span>
+            <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">livereload</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-watch'</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-connect" title="grunt connect">grunt-contrib-connect</a> （开启一个服务器，使我们可以通过 <code class="highlighter-rouge">ip:端口号</code> 的方式访问目录下的资源）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-connect –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="na">connect</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">server</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">port</span><span class="p">:</span> <span class="mi">9001</span><span class="p">,</span>
+                <span class="na">base</span><span class="p">:</span> <span class="s1">'www-root'</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-connect'</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-less" title="grunt less">grunt-contrib-less</a> （将less编译为css）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-less –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="na">development</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">files</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">'path/to/result.css'</span><span class="p">:</span> <span class="s1">'path/to/source.less'</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-less'</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><a href="https://github.com/gruntjs/grunt-contrib-coffee" title="grunt coffeescript">grunt-contrib-coffee</a> （将coffeescript编译成javascript）</p>
+
+    <ul>
+      <li>安装
+        <blockquote>
+          <p>$ npm install grunt-contrib-coffee –save-dev</p>
+        </blockquote>
+      </li>
+      <li>配置task</li>
+    </ul>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="na">development</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">files</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">'path/to/result.js'</span><span class="p">:</span> <span class="s1">'path/to/source.coffee'</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-contrib-coffee'</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+
+        <div class="page-footer">
+          <div class="page-tag">
+            <span>Tags:</span>
+            
+            <a href="/tags#Javascript" class="tag">| Javascript</a>
+            
+            <a href="/tags#Grunt" class="tag">| Grunt</a>
+            
+          </div><!-- End Tags -->
+        </div>
+        <div class="recent-box">
+  <h2 class="recent-title">最新发布</h2>
+  <div class="recent-list">
+    
+      
+        <a href="/MySQL%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E5%8F%8A%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" class="recent-item" style="background: url(/assets/img/post-3.jpg) center no-repeat; background-size: cover;"><span>MySQL索引原理及慢查询优化</span></a>
+      
+    
+      
+        <a href="/MongoDB%E4%BA%8B%E5%8A%A1/" class="recent-item" style="background: url(/assets/img/post-2.jpg) center no-repeat; background-size: cover;"><span>MongoDB 4.0 的新特性——事务（Transactions）</span></a>
+      
+    
+      
+        <a href="/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="recent-item" style="background: url(/assets/img/post-1.jpg) center no-repeat; background-size: cover;"><span>消息队列MQ</span></a>
+      
+    
+      
+        <a href="/ElasticSearch/" class="recent-item" style="background: url(/assets/img/post-4.jpg) center no-repeat; background-size: cover;"><span>ElasticSearch 安装</span></a>
+      
+    
+  </div>
+</div> <!-- End Recent-Box -->
+
+        <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+      </div>
+    </div> <!-- End Wrapper -->
+  </article>
+  <div class="search-box">
+  <div class="wrapper">
+    <div class="search-grid">
+      <form class="search-form">
+        <div id="search-container">
+          <input type="text" id="search-input" class="search" placeholder="Search">
+        </div>
+      </form>
+      <ul id="results-container" class="results-search"></ul>
+      <div class="icon-close-container">
+        <span class="search-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <footer class="main-footer">
+  <div class="copyright">
+    <p>2018 &copy; Silence Su</p>
+  </div>
+</footer> <!-- End Footer -->
+
+</div>
+
+  <!-- JS -->
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/jekyll-search.js"></script>
+<script>
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('results-container'),
+    json: '/search.json',
+    searchResultTemplate: '<li><a href="{url}" title="{desc}">{title}</a></li>',
+    noResultsText: 'No results found',
+    fuzzy: false,
+    exclude: ['Welcome']
+  });
+</script>
+<script src="/assets/js/main.js"></script>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>
