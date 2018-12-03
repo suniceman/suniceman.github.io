@@ -1,208 +1,837 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<title>Suniceman - Silence Su</title>
-	<meta name="description" content="">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta property="og:image" content="">
-	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
-	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-touch-icon-114x114.png">
-	<!-- Chrome, Firefox OS and Opera -->
-	<meta name="theme-color" content="#311e3e">
-	<!-- Windows Phone -->
-	<meta name="msapplication-navbutton-color" content="#311e3e">
-	<!-- iOS Safari -->
-	<meta name="apple-mobile-web-app-status-bar-style" content="#311e3e">
-	<!-- Google Fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
-	<!-- Styles -->
-	<link rel="stylesheet" href="/assets/css/main.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="My name is Silence Su. I’m a full-time backend developer.">
+    <meta name="keywords"  content="suniceman, Suniceman Blog, 博客, 个人网站, 互联网, 后端, Web, JavaScript, 前端, 设计">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Suniceman | Silence Su">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="我干了什么 究竟拿了时间换了什么">
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar-hux-ny.jpg">
+    <meta property="og:url" content="http://localhost:4000/">
+    <meta property="og:site_name" content="Suniceman | Silence Su">
+    
+    <title>Suniceman | Silence Su</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
 </head>
 
-<body>
-  <div class="flex-container">
-  <header class="main-header">
-  <div class="wrapper">
-    <div class="header-flex">
-      <div class="menu-icon-container">
-        <span class="menu-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
-      </div>
-      <nav class="main-nav">
-        <span class="menu-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
-        <ul>
-          <li><a href="/">文章</a></li>
-          <li><a href="/tags">标签</a></li>
-          <li><a href="/about">关于</a></li>
-        </ul>
-      </nav>
-      <p class="logo"><a href="/">Silence Su</a></p>
-      <div class="search-icon-container">
-        <span class="search-icon"><a><i class="fa fa-search" aria-hidden="true"></i></a></span>
-      </div>
-    </div>
-  </div>
-</header> <!-- End Header -->
 
-  <div class="content wrapper">
-    <ol class="post-card-box clearfix">
-  
-  <li>
-    <div class="post-card">
-      <a href="/Redis%E9%9B%86%E7%BE%A4%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E6%90%AD%E5%BB%BA/" class="post-card-image" style="background-image: url( /assets/img/post-4.jpg )">
-      </a>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
 
-      <div class="post-card-body">
-        
-        <a href="/tags#redis" class="tag">|&#32;redis</a>
-        
-        <a href="/Redis%E9%9B%86%E7%BE%A4%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E6%90%AD%E5%BB%BA/" class="post-card-link"><h3 class="post-card-title">Redis集群的原理和搭建</h3></a>
-      </div>
+    <!-- Navigation -->
 
-    </div>
-  </li>
-  
-  <li>
-    <div class="post-card">
-      <a href="/MySQL%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E5%8F%8A%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" class="post-card-image" style="background-image: url( /assets/img/post-3.jpg )">
-      </a>
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
 
-      <div class="post-card-body">
-        
-        <a href="/tags#mysql" class="tag">|&#32;mysql</a>
-        
-        <a href="/MySQL%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E5%8F%8A%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" class="post-card-link"><h3 class="post-card-title">MySQL索引原理及慢查询优化</h3></a>
-      </div>
-
-    </div>
-  </li>
-  
-  <li>
-    <div class="post-card">
-      <a href="/MongoDB%E4%BA%8B%E5%8A%A1/" class="post-card-image" style="background-image: url( /assets/img/post-2.jpg )">
-      </a>
-
-      <div class="post-card-body">
-        
-        <a href="/tags#mongodb" class="tag">|&#32;mongodb</a>
-        
-        <a href="/MongoDB%E4%BA%8B%E5%8A%A1/" class="post-card-link"><h3 class="post-card-title">MongoDB 4.0 的新特性——事务（Transactions）</h3></a>
-      </div>
-
-    </div>
-  </li>
-  
-  <li>
-    <div class="post-card">
-      <a href="/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-card-image" style="background-image: url( /assets/img/post-1.jpg )">
-      </a>
-
-      <div class="post-card-body">
-        
-        <a href="/tags#消息队列" class="tag">|&#32;消息队列</a>
-        
-        <a href="/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-card-link"><h3 class="post-card-title">消息队列MQ</h3></a>
-      </div>
-
-    </div>
-  </li>
-  
-  <li>
-    <div class="post-card">
-      <a href="/ElasticSearch/" class="post-card-image" style="background-image: url( /assets/img/post-4.jpg )">
-      </a>
-
-      <div class="post-card-body">
-        
-        <a href="/tags#ElasticSearch" class="tag">|&#32;ElasticSearch</a>
-        
-        <a href="/ElasticSearch/" class="post-card-link"><h3 class="post-card-title">ElasticSearch 安装</h3></a>
-      </div>
-
-    </div>
-  </li>
-  
-  <li>
-    <div class="post-card">
-      <a href="/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" class="post-card-image" style="background-image: url( /assets/img/post-3.jpg )">
-      </a>
-
-      <div class="post-card-body">
-        
-        <a href="/tags#操作系统" class="tag">|&#32;操作系统</a>
-        
-        <a href="/tags#os" class="tag">|&#32;os</a>
-        
-        <a href="/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" class="post-card-link"><h3 class="post-card-title">线程的基本概念</h3></a>
-      </div>
-
-    </div>
-  </li>
-  
-</ol>
-
-  <div class="search-box">
-  <div class="wrapper">
-    <div class="search-grid">
-      <form class="search-form">
-        <div id="search-container">
-          <input type="text" id="search-input" class="search" placeholder="Search">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Suniceman Blog</a>
         </div>
-      </form>
-      <ul id="results-container" class="results-search"></ul>
-      <div class="icon-close-container">
-        <span class="search-icon-close"><i class="fa fa-times" aria-hidden="true"></i></span>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Page Header -->
+
+
+
+
+
+
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        
+        <div class="site-heading">
+        
+          <h1>Suniceman Blog</h1>
+          <span class="subheading">我干了什么 究竟拿了时间换了什么</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</header>
 
-  <div class="pagination clearfix">
-  
-  
-    <a href="/page2/" class="next">下一页<i class="fa fa-angle-right" aria-hidden="true"></i></a>
-  
-</div>
 
-  </div> <!-- End Wrapper -->
-  <footer class="main-footer">
-  <div class="copyright">
-    <p>2018 &copy; Silence Su</p>
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- PostList Container -->
+    		<div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                postlist-container
+            ">
+    			
+<div class="post-preview">
+    <a href="/2018/11/30/mongodb%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE/">
+        <h2 class="post-title">
+            mongodb删除重复数据
+        </h2>
+        
+        <h3 class="post-subtitle">
+            删除线上运行数据产生的脏数据
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+
+  注：mongodb当前版本是3.4.3
+
+
+
+  线上会员注册的小程序， 因粉丝upsert会员的接口出现问题（在转公众号粉丝的时候因没有openId，使用的是缓存数据，有两分钟延迟，每两分钟内修改的是同一个会员的数据），导致会员的数据被重复修改产生脏数据，需要进行数据清洗
+
+
+删除重复数据的mongo语句：
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on November 30, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/06/Redis%E9%9B%86%E7%BE%A4%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E6%90%AD%E5%BB%BA/">
+        <h2 class="post-title">
+            Redis集群的原理和搭建
+        </h2>
+        
+        <h3 class="post-subtitle">
+            集群搭建记录
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+Redis 是我们目前大规模使用的缓存中间件，由于它强大高效而又便捷的功能，得到了广泛的使用。单节点的Redis已经就达到了很高的性能，为了提高可用性我们可以使用Redis集群。本文参考了Rdis的官方文档和使用Redis官方提供的Redis Cluster工具搭建Rdis集群。
+
+  注意 ：Redis的版本要在3.0以上,截止今天，Redis的版本是3.2.9，本教程也使用3.2....
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on October 6, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/06/MySQL%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E5%8F%8A%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/">
+        <h2 class="post-title">
+            MySQL索引原理及慢查询优化
+        </h2>
+        
+        <h3 class="post-subtitle">
+            索引及优化
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                背景
+MySQL凭借着出色的性能、低廉的成本、丰富的资源，已经成为绝大多数互联网公司的首选关系型数据库。虽然性能出色，但所谓“好马配好鞍”，如何能够更好的使用它，已经成为开发工程师的必修课，我们经常会从职位描述上看到诸如“精通MySQL”、“SQL语句优化”、“了解数据库原理”等要求。我们知道一般的应用系统，读写比例在10:1左右，而且插入操作和一般的更新操作很少出现性能问题，遇到最多的，也...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on October 6, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/01/MongoDB%E4%BA%8B%E5%8A%A1/">
+        <h2 class="post-title">
+            MongoDB 4.0 的新特性——事务（Transactions）
+        </h2>
+        
+        <h3 class="post-subtitle">
+            事务的使用
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+
+相信使用过主流的关系型数据库的朋友对“事务（Transactions）”不会太陌生，它可以让我们把对多张表的多次数据库操作整合为一次原子操作，这在高并发场景下可以保证多个数据操作之间的互不干扰；并且一旦在这些操作过程任一环节中出现了错误，事务会中止并且让数据回滚，这使得同时在多张表中修改数据的时候保证了数据的一致性。
+
+以前 MongoDB 是不支持事务的，因此开发者在需要用到事务的...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on October 1, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/07/25/ElasticSearch/">
+        <h2 class="post-title">
+            ElasticSearch 安装
+        </h2>
+        
+        <h3 class="post-subtitle">
+            ElasticSear的安装及插件
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                安装
+
+
+  首先从官网下载安装包
+  此处我们选择2.4.6这个版本,然后下载tar压缩包
+  下载以后直接解压，就算安装完成了
+    1
+tar zxvf elasticsearch-2.4.6.tar.gz
+    
+  
+
+
+配置
+
+
+  编辑elasticsearch配置文件
+    1
+2
+3
+4
+# 进入安装目录
+cd elasticsearch-2.4.6
+# 编辑配置文件...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on July 25, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/06/20/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">
+        <h2 class="post-title">
+            线程的基本概念
+        </h2>
+        
+        <h3 class="post-subtitle">
+            如果说，在操作系统中引入进程的目的，是为了使多个程序能并发执行，以提高资源利用率和系统吞吐量，那么，在操作系统中再引入线程，则是为了减少程序在并发执行时所付出的时空开销，使 OS 具有更好的并发性。
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                线程的引入
+
+如果说，在操作系统中引入进程的目的，是为了使多个程序能并发执行，以提高资源利用率和系统吞吐量，那么，在操作系统中再引入线程，则是为了减少程序在并发执行时所付出的时空开销，使 OS 具有更好的并发性。
+
+由于进程是一个资源的拥有者，因而在创建、撤消和切换中，系统必须为之付出较大的时空开销。线程作为调度和分派的基本单位。
+
+线程与进程的比较
+
+线程具有许多传统进程所具有的特征，所以...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on June 20, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/06/18/webpack/">
+        <h2 class="post-title">
+            Webpack
+        </h2>
+        
+        <h3 class="post-subtitle">
+            webpack 是一个模块打包器(module bundler)。打包器(bundler)帮助您取得准备用于部署的 JavaScript 和样式表，将它们转换为适合浏览器的可用格式。
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                介绍
+首先我们要消除一个常见的误解。webpack 是一个模块打包器(module bundler)（例如，Browserify 或 Brunch）。它不是一个任务执行器(task runner)（例如，Make, Grunt 或者 Gulp ）。任务执行器就是用来自动化处理常见的开发任务，例如项目的检查(lint)、构建(build)、测试(test)。相对于打包器(bundler)，任务...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on June 18, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/05/22/grunt/">
+        <h2 class="post-title">
+            Grunt
+        </h2>
+        
+        <h3 class="post-subtitle">
+            Grunt是一个基于NodeJS，可用于自动化构建、测试、生成文档的项目管理工具
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                简介
+
+Grunt是一个基于NodeJS，可用于自动化构建、测试、生成文档的项目管理工具。
+
+Grunt 能做什么
+
+Grunt可以自动化我们的整个开发流程，简单地说，就是用JavaScript去执行一些程序来完成一些任务。比如说将css、Javascript、图像等资源压缩；将Sass和Less通过预处理器编译成Css；将Coffeescript、Typescript等转化为Javascr...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on May 22, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/05/10/%E5%88%A4%E6%96%ADios%E5%92%8C%E5%AE%89%E5%8D%93%E5%92%8CAndroid%E5%8F%8APC%E7%AB%AF/">
+        <h2 class="post-title">
+            判断ios和Android及PC端
+        </h2>
+        
+        <h3 class="post-subtitle">
+            JS通过navigator属性来区分不同的设备
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                navigator的一些常用属性
+
+
+  navigator为window对象的一个属性，指向了一个包含浏览器相关信息的对象
+
+
+1
+2
+3
+navigator.appVersion 浏览器的版本号
+navigator.language 浏览器使用的语言
+navigator.userAgent 浏览器的userAgent信息
+
+
+  其中userAgent 属性是一个只读的字符串，声明了浏览...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on May 10, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/05/01/java-and-golang/">
+        <h2 class="post-title">
+            Java和Golang的区别
+        </h2>
+        
+        <h3 class="post-subtitle">
+            从几方面比较java和golang的差别
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                1. 结构体 -&gt; 类
+
+// 包名即为包含该文件的目录名字
+package collection
+
+// 声明一个结构体，类似Java中的类
+type Stack struct {
+    data []string
+}
+
+// 声明一个Push函数，并通过一个Stack的指针对象实现该方法
+// 类似声明了Stack的成员方法
+func (s *Stack) Push(x stri...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on May 1, 2017
+    </p>
+</div>
+<hr>
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+    <li class="next">
+        <a href="/page2">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
+
+
+    		</div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0009" 
+                    href="/archive/?tag=Javascript"
+                    title="Javascript"
+                    rel="3">Javascript</a>
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
+                    title="数据库"
+                    rel="4">数据库</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=mongodb"
+                    title="mongodb"
+                    rel="2">mongodb
+    </div>
+</section>
+
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+  <hr>
+  <h5><a href="/about/">ABOUT ME</a></h5>
+  <div class="short-about">
+    
+    <img src="/img/avatar-hux-ny.jpg" />
+    
+    
+    <p>For the next quantum leap<br>离开世界之前，一切都是过程</p>
+    
+    <!-- SNS Link -->
+    
+
+
+<ul class="list-inline">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
   </div>
-</footer> <!-- End Footer -->
+</section>
 
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://suniceman.github.io">Suniceman</a></li>
+  
+</ul>
+
+    		</div>
+        
+	</div>
 </div>
 
-  <!-- JS -->
-<script src="/assets/js/jquery-3.2.1.min.js"></script>
-<script src="/assets/js/jekyll-search.js"></script>
-<script>
-  SimpleJekyllSearch({
-    searchInput: document.getElementById('search-input'),
-    resultsContainer: document.getElementById('results-container'),
-    json: '/search.json',
-    searchResultTemplate: '<li><a href="{url}" title="{desc}">{title}</a></li>',
-    noResultsText: 'No results found',
-    fuzzy: false,
-    exclude: ['Welcome']
-  });
-</script>
-<script src="/assets/js/main.js"></script>
 
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', '', 'auto');
-  ga('send', 'pageview');
-</script> <!-- End Analytics -->
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Suniceman Blog 2018
+                    <br>
+                    Powered by <a href="http://suniceman.github.io">Suniceman Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=suniceman&repo=suniceman.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '3bca1d38b47f9792582693607f23e199';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.jpg" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
 
 </body>
+
 </html>

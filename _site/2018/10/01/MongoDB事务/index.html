@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="My name is Silence Su. I’m a full-time backend developer.">
+    <meta name="keywords"  content="suniceman, Suniceman Blog, 博客, 个人网站, 互联网, 后端, Web, JavaScript, 前端, 设计">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="MongoDB 4.0 的新特性——事务（Transactions） - Suniceman | Silence Su">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="前言
+
+">
+    
+    <meta property="article:published_time" content="2018-10-01T21:32:20Z">
+    
+    
+    <meta property="article:author" content="Silence">
+    
+    
+    <meta property="article:tag" content="mongodb">
+    
+    <meta property="article:tag" content="数据库">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar-hux-ny.jpg">
+    <meta property="og:url" content="http://localhost:4000/2018/10/01/MongoDB%E4%BA%8B%E5%8A%A1/">
+    <meta property="og:site_name" content="Suniceman | Silence Su">
+    
+    <title>MongoDB 4.0 的新特性——事务（Transactions） - Suniceman | Silence Su</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2018/10/01/MongoDB%E4%BA%8B%E5%8A%A1/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Suniceman Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.jpg" width="0" height="0"> -->
+<!-- <img src="/" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/');
+        background: linear-gradient(to right, #404040, #404040);;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=mongodb" title="mongodb">mongodb</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93" title="数据库">数据库</a>
+                        
+                    </div>
+                    <h1>MongoDB 4.0 的新特性——事务（Transactions）</h1>
+                    
+                    <h2 class="subheading">事务的使用</h2>
+                    <span class="meta">Posted by Silence on October 1, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h2 id="前言">前言</h2>
+
+<p>相信使用过主流的关系型数据库的朋友对“事务（Transactions）”不会太陌生，它可以让我们把对多张表的多次数据库操作整合为一次原子操作，这在高并发场景下可以保证多个数据操作之间的互不干扰；并且一旦在这些操作过程任一环节中出现了错误，事务会中止并且让数据回滚，这使得同时在多张表中修改数据的时候保证了数据的一致性。</p>
+
+<p>以前 MongoDB 是不支持事务的，因此开发者在需要用到事务的时候，不得不借用其他工具，在业务代码层面去弥补数据库的不足。随着 4.0 版本的发布，MongoDB 也为我们带来了原生的事务操作，下面就让我们一起来认识它，并通过简单的例子了解如何去使用。</p>
+
+<h2 id="介绍">介绍</h2>
+
+<h3 id="事务和副本集replica-sets">事务和副本集（Replica Sets）</h3>
+
+<p>副本集是 MongoDB 的一种主副节点架构，它使数据得到最大的可用性，避免单点故障引起的整个服务不能访问的情况的发生。目前 MongoDB 的多表事务操作仅支持在副本集上运行，想要在本地环境安装运行副本集可以借助一个工具包——run-rs，以下的文章中有详细的使用说明：</p>
+
+<blockquote>
+  <p><a href="https://thecodebarbarian.com/introducing-run-rs-zero-config-mongodb-runner.html">https://thecodebarbarian.com/introducing-run-rs-zero-config-mongodb-runner.html</a></p>
+</blockquote>
+
+<h3 id="事务和会话sessions">事务和会话（Sessions）</h3>
+
+<p>事务和会话（Sessions）关联，一个会话同一时刻只能开启一个事务操作，当一个会话断开，这个会话中的事务也会结束</p>
+
+<h3 id="事务中的函数">事务中的函数</h3>
+<blockquote>
+  <p>Session.startTransaction()</p>
+</blockquote>
+
+<p>提交事务，将事务中对数据的修改进行保存，然后结束当前事务，一次事务在提交之前的数据操作对外都是不可见的。</p>
+<blockquote>
+  <p>Session.abortTransaction()</p>
+</blockquote>
+
+<p>中止当前的事务，并将事务中执行过的数据修改回滚。</p>
+
+<h3 id="重试">重试</h3>
+<p>当事务运行中报错，catch 到的错误对象中会包含一个属性名为 errorLabels 的数组，当这个数组中包含以下2个元素的时候，代表我们可以重新发起相应的事务操作。</p>
+<blockquote>
+  <p>TransientTransactionError：出现在事务开启以及随后的数据操作阶段
+UnknownTransactionCommitResult：出现在提交事务阶段</p>
+</blockquote>
+
+<h2 id="示例">示例</h2>
+<p>经过上面的铺垫，你是不是已经迫不及待想知道究竟应该怎么写代码去完成一次完整的事务操作？下面我们就简单写一个例子：</p>
+
+<p>场景描述：  假设一个交易系统中有2张表——记录商品的名称、库存数量等信息的表 commodities，和记录订单的表 orders。当用户下单的时候，首先要找到 commodities 表中对应的商品，判断库存数量是否满足该笔订单的需求，是的话则减去相应的值，然后在 orders 表中插入一条订单数据。在高并发场景下，可能在查询库存数量和减少库存的过程中，又收到了一次新的创建订单请求，这个时候可能就会出问题，因为新的请求在查询库存的时候，上一次操作还未完成减少库存的操作，这个时候查询到的库存数量可能是充足的，于是开始执行后续的操作，实际上可能上一次操作减少了库存后，库存的数量就已经不足了，于是新的下单请求可能就会导致实际创建的订单数量超过库存数量。</p>
+
+<p>以往要解决这个问题，我们可以用给商品数据“加锁”的方式，比如基于 Redis 的各种锁，同一时刻只允许一个订单操作一个商品数据，这种方案能解决问题，缺点就是代码更复杂了，并且性能会比较低。如果用数据库事务的方式就可以简洁很多</p>
+
+<p>commodities 表数据（stock 为库存）：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd69319a"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"灭霸原味手套"</span><span class="p">,</span><span class="w"> </span><span class="s2">"stock"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd693198"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"雷神专用铁锤"</span><span class="p">,</span><span class="w"> </span><span class="s2">"stock"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>orders 表数据：</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af07daa051d92f02462644c"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"commodity"</span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd69319a"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af07daa051d92f02462644b"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"commodity"</span><span class="p">:</span><span class="w"> </span><span class="err">ObjectId(</span><span class="s2">"5af0776263426f87dd693198"</span><span class="err">)</span><span class="p">,</span><span class="w"> </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>通过一次事务完成创建订单操作（mongo Shell）：</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+</pre></td><td class="rouge-code"><pre><span class="c1">// 执行 txnFunc 并且在遇到 TransientTransactionError 的时候重试</span>
+<span class="kd">function</span> <span class="nx">runTransactionWithRetry</span><span class="p">(</span><span class="nx">txnFunc</span><span class="p">,</span> <span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">txnFunc</span><span class="p">(</span><span class="nx">session</span><span class="p">);</span> <span class="c1">// 执行事务</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">'errorLabels'</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">errorLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">'TransientTransactionError'</span><span class="p">)</span>
+      <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">print</span><span class="p">(</span><span class="s1">'TransientTransactionError, retrying transaction ...'</span><span class="p">);</span>
+        <span class="k">continue</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 提交事务并且在遇到 UnknownTransactionCommitResult 的时候重试</span>
+<span class="kd">function</span> <span class="nx">commitWithRetry</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">commitTransaction</span><span class="p">();</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s1">'Transaction committed.'</span><span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">'errorLabels'</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">error</span><span class="p">.</span><span class="nx">errorLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">'UnknownTransactionCommitResult'</span><span class="p">)</span>
+      <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">print</span><span class="p">(</span><span class="s1">'UnknownTransactionCommitResult, retrying commit operation ...'</span><span class="p">);</span>
+        <span class="k">continue</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">print</span><span class="p">(</span><span class="s1">'Error during commit ...'</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 在一次事务中完成创建订单操作</span>
+<span class="kd">function</span> <span class="nx">createOrder</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">commoditiesCollection</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getDatabase</span><span class="p">(</span><span class="s1">'mall'</span><span class="p">).</span><span class="nx">commodities</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">ordersCollection</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">getDatabase</span><span class="p">(</span><span class="s1">'mall'</span><span class="p">).</span><span class="nx">orders</span><span class="p">;</span>
+  <span class="c1">// 假设该笔订单中商品的数量</span>
+  <span class="kd">var</span> <span class="nx">orderAmount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="c1">// 假设商品的ID</span>
+  <span class="kd">var</span> <span class="nx">commodityID</span> <span class="o">=</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s1">'5af0776263426f87dd69319a'</span><span class="p">);</span>
+
+  <span class="nx">session</span><span class="p">.</span><span class="nx">startTransaction</span><span class="p">({</span>
+    <span class="na">readConcern</span><span class="p">:</span> <span class="p">{</span> <span class="na">level</span><span class="p">:</span> <span class="s1">'snapshot'</span> <span class="p">},</span>
+    <span class="na">writeConcern</span><span class="p">:</span> <span class="p">{</span> <span class="na">w</span><span class="p">:</span> <span class="s1">'majority'</span> <span class="p">},</span>
+  <span class="p">});</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="p">{</span> <span class="nx">stock</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">commoditiesCollection</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span> <span class="na">_id</span><span class="p">:</span> <span class="nx">commodityID</span> <span class="p">});</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">stock</span> <span class="o">&lt;</span> <span class="nx">orderAmount</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s1">'Stock is not enough'</span><span class="p">);</span>
+      <span class="nx">session</span><span class="p">.</span><span class="nx">abortTransaction</span><span class="p">();</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">'Stock is not enough'</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">commoditiesCollection</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+      <span class="p">{</span> <span class="na">_id</span><span class="p">:</span> <span class="nx">commodityID</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">$inc</span><span class="p">:</span> <span class="p">{</span> <span class="na">stock</span><span class="p">:</span> <span class="o">-</span><span class="nx">orderAmount</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">);</span>
+    <span class="nx">ordersCollection</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span>
+      <span class="na">commodity</span><span class="p">:</span> <span class="nx">commodityID</span><span class="p">,</span>
+      <span class="na">amount</span><span class="p">:</span> <span class="nx">orderAmount</span><span class="p">,</span>
+    <span class="p">});</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s1">'Caught exception during transaction, aborting.'</span><span class="p">);</span>
+    <span class="nx">session</span><span class="p">.</span><span class="nx">abortTransaction</span><span class="p">();</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">commitWithRetry</span><span class="p">(</span><span class="nx">session</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 发起一次会话</span>
+<span class="kd">var</span> <span class="nx">session</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getMongo</span><span class="p">().</span><span class="nx">startSession</span><span class="p">({</span> <span class="na">readPreference</span><span class="p">:</span> <span class="p">{</span> <span class="na">mode</span><span class="p">:</span> <span class="s1">'primary'</span> <span class="p">}</span> <span class="p">});</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nx">runTransactionWithRetry</span><span class="p">(</span><span class="nx">createOrder</span><span class="p">,</span> <span class="nx">session</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// 错误处理</span>
+<span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+  <span class="nx">session</span><span class="p">.</span><span class="nx">endSession</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>上面的代码看着感觉很多，其实 runTransactionWithRetry 和 commitWithRetry 这两个函数都是可以抽离出来成为公共函数的，不需要每次操作都重复书写。用上了事务之后，因为事务中的数据操作都是一次原子操作，所以我们就不需要考虑分布并发导致的数据一致性的问题，是不是感觉简单了许多？</p>
+
+<p>你可能注意到了，代码中在执行 startTransaction 的时候设置了两个参数——readConcern 和 writeConcern，这是 MongoDB 读写操作的确认级别，在这里用于在副本集中平衡数据读写操作的可靠性和性能，如果在这里展开就太多了，所以感兴趣的朋友建议去阅读官方文档了解一下：</p>
+
+<blockquote>
+  <p>readConcern： <a href="https://docs.mongodb.com/master/reference/read-concern/">https://docs.mongodb.com/master/reference/read-concern/</a></p>
+</blockquote>
+
+<blockquote>
+  <p>writeConcern： <a href="https://docs.mongodb.com/master/reference/write-concern/">https://docs.mongodb.com/master/reference/write-concern/</a></p>
+</blockquote>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/07/25/ElasticSearch/" data-toggle="tooltip" data-placement="top" title="ElasticSearch 安装">
+                        Previous<br>
+                        <span>ElasticSearch 安装</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/10/06/MySQL%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E5%8F%8A%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" data-toggle="tooltip" data-placement="top" title="MySQL索引原理及慢查询优化">
+                        Next<br>
+                        <span>MySQL索引原理及慢查询优化</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+                
+            </div>
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0009" 
+                    href="/archive/?tag=Javascript"
+                    title="Javascript"
+                    rel="3">Javascript</a>
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
+                    title="数据库"
+                    rel="4">数据库</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=mongodb"
+                    title="mongodb"
+                    rel="2">mongodb
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://suniceman.github.io">Suniceman</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "suniceman";
+    var disqus_identifier = "/2018/10/01/MongoDB事务";
+    var disqus_url = "http://localhost:4000/2018/10/01/MongoDB%E4%BA%8B%E5%8A%A1/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/suniceman">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Suniceman Blog 2018
+                    <br>
+                    Powered by <a href="http://suniceman.github.io">Suniceman Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=suniceman&repo=suniceman.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '3bca1d38b47f9792582693607f23e199';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.jpg" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
