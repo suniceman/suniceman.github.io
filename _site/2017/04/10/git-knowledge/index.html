@@ -11,12 +11,11 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="Hello World - Suniceman | Silence Su">
+    <meta property="og:title" content="Git 常用命令总结 - Suniceman | Silence Su">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="
-  “Yeah It’s on. ”
-
+    <meta property="og:description" content="前言
+在工作中需要对代码进行版本控制， 公司使用git进行版本控制， 花费了两天时间对git进行了学习， 现整理一些常用的git命令。
 
 ">
     
@@ -26,16 +25,14 @@
     <meta property="article:author" content="Silence">
     
     
-    <meta property="article:tag" content="Blog">
-    
-    <meta property="article:tag" content="Meta">
+    <meta property="article:tag" content="git">
     
     
     <meta property="og:image" content="http://localhost:4000/img/avatar-hux-ny.jpg">
-    <meta property="og:url" content="http://localhost:4000/2017/04/10/hello-world/">
+    <meta property="og:url" content="http://localhost:4000/2017/04/10/git-knowledge/">
     <meta property="og:site_name" content="Suniceman | Silence Su">
     
-    <title>Hello World - Suniceman | Silence Su</title>
+    <title>Git 常用命令总结 - Suniceman | Silence Su</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -44,7 +41,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2017/04/10/hello-world/">
+    <link rel="canonical" href="http://localhost:4000/2017/04/10/git-knowledge/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -192,7 +189,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.jpg" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-2017.jpg" width="0" height="0"> -->
+<!-- <img src="/" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -201,8 +198,8 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-2017.jpg');
-        background: ;
+        background-image: url('/');
+        background: linear-gradient(to right, #404040, #404040);;
     }
 
     
@@ -218,14 +215,12 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=Blog" title="Blog">Blog</a>
-                        
-                        <a class="tag" href="/archive/?tag=Meta" title="Meta">Meta</a>
+                        <a class="tag" href="/archive/?tag=git" title="git">git</a>
                         
                     </div>
-                    <h1>Hello World</h1>
+                    <h1>Git 常用命令总结</h1>
                     
-                    <h2 class="subheading"> "Hello World, Hello Blog"</h2>
+                    <h2 class="subheading">How to use git?</h2>
                     <span class="meta">Posted by Silence on April 10, 2017</span>
                 </div>
             </div>
@@ -252,80 +247,81 @@
                 <!-- Multi-Lingual -->
                 
 
-				<blockquote>
-  <p>“Yeah It’s on. ”</p>
-</blockquote>
+				<h2 id="前言">前言</h2>
+<p>在工作中需要对代码进行版本控制， 公司使用git进行版本控制， 花费了两天时间对git进行了学习， 现整理一些常用的git命令。</p>
 
-<h2 id="前言">前言</h2>
+<h2 id="git常用命令">Git常用命令</h2>
 
-<p>Suniceman Blog 就这么开通了。</p>
-
-<p><a href="#build">跳过废话，直接看技术实现 </a></p>
-
-<p>2017 Silence Su总算有个地方可以好好写点东西了。</p>
-
-<p>作为一个程序员， Blog 这种轮子要是挂在大众博客程序上就太没意思了。一是觉得大部分 Blog 服务都太丑，二是觉得不能随便定制不好玩。之前因为太懒没有折腾，结果就一直连个写 Blog 的地儿都没有。</p>
-
-<p id="build"></p>
-<hr />
-
-<h2 id="正文">正文</h2>
-
-<p>接下来说说搭建这个博客的技术细节。</p>
-
-<p>正好之前就有关注过 <a href="https://pages.github.com/">GitHub Pages</a> + <a href="http://jekyllrb.com/">Jekyll</a> 快速 Building Blog 的技术方案，非常轻松时尚。</p>
-
-<p>其优点非常明显：</p>
-
-<ul>
-  <li><strong>Markdown</strong> 带来的优雅写作体验</li>
-  <li>非常熟悉的 Git workflow ，<strong>Git Commit 即 Blog Post</strong></li>
-  <li>利用 GitHub Pages 的域名和免费无限空间，不用自己折腾主机
+<ol>
+  <li><code class="highlighter-rouge">git log</code>  查看提交历史记录
     <ul>
-      <li>如果需要自定义域名，也只需要简单改改 DNS 加个 CNAME 就好了</li>
+      <li><code class="highlighter-rouge">git reflog</code>  查看命令历史</li>
     </ul>
   </li>
-  <li>Jekyll 的自定制非常容易，基本就是个模版引擎</li>
-</ul>
-
-<p>果断开 Chrome DevTool 查了下网络请求，原来是 <strong>pending 在了 Google Fonts</strong> 上，页面渲染一直被阻塞到请求超时为止，难怪这么慢。
-忍痛割爱，只好把 Web Fonts 去了（反正超时看到的也只能是 fallback ），果然一下就正常了，而且 GitHub 和 GitCafe 对比并没有感受到明显的速度差异，虽然 github 的 ping 值明显要高一些，达到了 300ms，于是用 DNSPOD 优化了一下速度。</p>
-
-<hr />
-
-<p>配置的过程中也没遇到什么坑，基本就是 Git 的流程，相当顺手</p>
-
-<p>大的 Jekyll 主题上直接 fork 了 Clean Blog（这个主题也相当有名，就不多赘述了。唯一的缺点大概就是没有标签支持，于是我给它补上了。）</p>
-
-<p>本地调试环境需要 <code class="highlighter-rouge">gem install jekyll</code>，结果 rubygem 的源居然被墙了……后来手动改成了我大淘宝的镜像源才成功</p>
-
-<p>Theme 的 CSS 是基于 Bootstrap 定制的，看得不爽的地方直接在 Less 里改就好了（平时更习惯 SCSS 些），<strong>不过其实我一直觉得 Bootstrap 在移动端的体验做得相当一般，比我在淘宝参与的团队 CSS 框架差多了……</strong>所以为了体验，也补了不少 CSS 进去</p>
-
-<p>最后就进入了耗时反而最长的<strong>做图、写字</strong>阶段，也算是进入了<strong>写博客</strong>的正轨，因为是类似 Hack Day 的方式去搭这个站的，所以折腾折腾着大半夜就过去了。</p>
-
-<p>第二天考虑中文字体的渲染，fork 了 <a href="http://www.typeisbeautiful.com/">Type is Beautiful</a> 的 <code class="highlighter-rouge">font</code> CSS，调整了字号，适配了 Win 的渣渲染，中英文混排效果好多了。</p>
-
-<h2 id="后记">后记</h2>
-
-<p>回顾这个博客的诞生，纯粹是出于个人兴趣。 用于记录工作、生活过程中的打怪升级之路。</p>
-
+  <li>回退
+    <ol>
+      <li>在工作区修改（指的是已经被追踪的文件）了但是还没add, <code class="highlighter-rouge">git checkout -- 文件名</code> 或 <code class="highlighter-rouge">git stash</code> 和  <code class="highlighter-rouge">git stash clear</code></li>
+      <li>已经添加add,但是还没有commit, <code class="highlighter-rouge">git reset HEAD</code> 文件名(这样就会把暂存区的文件返回到工作区,接着使用步骤1的方法撤销即可)</li>
+      <li>已经添加暂存，也commit了
+        <ul>
+          <li>使用<code class="highlighter-rouge">git log</code>查看提交历史记录，找到你提交错误的那次，然后找到它的钱一次的commit id
+ <code class="highlighter-rouge">git reset --hard commitId</code></li>
+        </ul>
+      </li>
+      <li>已经push了，但是想要修改刚提交的commit信息
+  场景：提交了一个commit信息，也push 到远程了，但是此时想要修改提交的message信息，必须是最近一次的  <code class="highlighter-rouge">git commit --amend</code> 此时出现窗口修改commit message信息, <code class="highlighter-rouge">git push origin 分知名 -f</code></li>
+      <li>已经push了，而且不小心commit和push好几次，但是你现在没有任何改动了，此时就无法直接用<code class="highlighter-rouge">git rebase</code>了，但是想把commit提交合并成一次, <code class="highlighter-rouge">git log</code> 查找该分支的第一次提交commitId
+<code class="highlighter-rouge">git reset --soft commitId</code>  (–soft 和 –hard的区别就是 –soft是软回退，会将你这次commitId之后的提交全部回退到暂存区中，–hard会将你这次commitId之后的提交全部清除掉)</li>
+    </ol>
+  </li>
+  <li>提交前做的事情，完成一项任务之后
+    <pre><code class="language-git"> git add 文件
+ git commit -m "fsd"
+ git fetch
+ git rebase origin/develop
+ 解决冲突。。。。（git rebase --continue）
+ git push -f origin 分支名 ()
+ 解决
+</code></pre>
+  </li>
+  <li>git 缓存的常用方法
+    <ol>
+      <li>git stash</li>
+      <li>git stash pop</li>
+      <li>git stash list</li>
+      <li>git stash apply stashId //从列表中获取，但是该stash还存在与list中</li>
+      <li>git stash drop stashId //从列表中删除</li>
+      <li>git stash clear  //删除列表</li>
+    </ol>
+  </li>
+  <li>将git log中的某一次提交合并的一个分支上，
+ 使用场景：例如我把一次提交合并到分支a了，然后将分支a（基于develop创建的）请求合并到develop，但是此时你发现要把该分支的合并倒master
+    <ol>
+      <li>创建新的分支b(基于master分支创建)</li>
+      <li>找到你那次提交的commitId号</li>
+      <li>git cherry-pick commitId（在b分支下执行）</li>
+      <li>git push 到远程分支上</li>
+      <li>
+        <p>发送merge 请求到master</p>
+      </li>
+      <li>更改分知名(用于没开issue号,但是想先做)
+        <ul>
+          <li><code class="highlighter-rouge">git branch -M hotfix-job-sync-blocked-member(旧分支名)(空格)hotfix-649(新分知名)</code></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2017/04/10/git-knowledge/" data-toggle="tooltip" data-placement="top" title="Git 常用命令总结">
-                        Previous<br>
-                        <span>Git 常用命令总结</span>
-                        </a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2017/04/10/markdown-syntax/" data-toggle="tooltip" data-placement="top" title="Markdown Syntax">
+                        <a href="/2017/04/10/hello-world/" data-toggle="tooltip" data-placement="top" title="Hello World">
                         Next<br>
-                        <span>Markdown Syntax</span>
+                        <span>Hello World</span>
                         </a>
                     </li>
                     
@@ -426,8 +422,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "suniceman";
-    var disqus_identifier = "/2017/04/10/hello-world";
-    var disqus_url = "http://localhost:4000/2017/04/10/hello-world/";
+    var disqus_identifier = "/2017/04/10/git-knowledge";
+    var disqus_url = "http://localhost:4000/2017/04/10/git-knowledge/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
