@@ -1,23 +1,23 @@
 # Hux Blog
 
-### [View Live Hux Blog &rarr;](https://huangxuan.me)
+### [View Live Hux Blog &rarr;](https://suniceman.top)
 
-![](http://huangxuan.me/img/blog-desktop.jpg)
+![](http://suniceman.top/img/blog-desktop.jpg)
 
 
 
 ## Boilerplate (beta)
 
-Want to clone a boilerplate instead of my buzz blog? Here comes this!  
+Want to clone a boilerplate instead of my buzz blog? Here comes this!
 
 ```
 $ git clone git@github.com:Huxpro/huxblog-boilerplate.git
 ```
 
-**[View Boilerplate Here &rarr;](http://huangxuan.me/huxblog-boilerplate/)**
+**[View Boilerplate Here &rarr;](http://suniceman.top/huxblog-boilerplate/)**
 
 
-## Porting 
+## Porting
 
 - [**Hexo**](https://github.com/Kaijun/hexo-theme-huxblog) by @kaijun
 - [**React-SSR**](https://github.com/LucasIcarus/huxpro.github.io/tree/ssr) by @LucasIcarus
@@ -30,9 +30,9 @@ $ git clone git@github.com:Huxpro/huxblog-boilerplate.git
 
 ##### V1.8
 
-- Brand new [Archive](https://huangxuan.me/archive/) page! Which is not just serving as common archive page but also Tag page where all posts are filter-able with tags!
+- Brand new [Archive](https://suniceman.top/archive/) page! Which is not just serving as common archive page but also Tag page where all posts are filter-able with tags!
 Thanks [@kitian616/jekyll-TeXt-theme](https://github.com/kitian616/jekyll-TeXt-theme) to bring this brilliant idea. Noted that the old Tag page and Archive page are deprecated but the new archive's totally backward compatiable.
-- Re-engineering of the blog by extracting duplicated liquid templates. This was proposed in #74 by @Kaijun but postponed for entirely 2.5 years! I wasn't able to merge his PR directly because of long-time divegence but I'd love to give him the full credit! 
+- Re-engineering of the blog by extracting duplicated liquid templates. This was proposed in #74 by @Kaijun but postponed for entirely 2.5 years! I wasn't able to merge his PR directly because of long-time divegence but I'd love to give him the full credit!
 - New code block! Long-wanted line number are supported out of the box now (thanks for @SmilingParadise's help on Sina Weibo) and the theme was updated to Atom One Dark (checkout FQA for how to change to your farovite theme)
 - MathJax support by @Voleking in #80, but I choose the SVG renderer. See [Mathjax, kramdown and Octopress](https://www.lucypark.kr/blog/2013/02/25/mathjax-kramdown-and-octopress/) for writing and escaping details.
 - Open Graph Protocol support by @Android-KitKat in #253
@@ -75,7 +75,7 @@ Thanks [@kitian616/jekyll-TeXt-theme](https://github.com/kitian616/jekyll-TeXt-t
 
 - Big Improvement to the **Navigation Menu** *(especially in Android)*:  Dropping the old, stuttering, low-performance [Bootstrap collapse.js](http://getbootstrap.com/javascript/#collapse),  replaced with an own wrote, [jank free](http://jankfree.org/) navbar menu in a pretty high-performance implementation of [Google Material Design](https://www.google.com/design/spec/material-design/introduction.html).
 
-<img src="http://huangxuan.me/img/blog-md-navbar.gif" width="320" />
+<img src="http://suniceman.top/img/blog-md-navbar.gif" width="320" />
 
 
 ##### V1.2
@@ -144,7 +144,7 @@ title: Hux Blog             # title of your website
 SEOTitle: Hux Blog			# check out docs for more detail
 description: "Cool Blog"    # ...
 
-# SNS settings      
+# SNS settings
 github_username: huxpro     # modify this account to yours
 weibo_username: huxpro      # the footer woule be auto-updated.
 
@@ -177,7 +177,7 @@ tags:
 
 #### SideBar
 
-![](http://huangxuan.me/img/blog-sidebar.jpg)
+![](http://suniceman.top/img/blog-sidebar.jpg)
 
 Seeing more information may be necessary for you to display, from V1.1, a clean, gorgeous **SideBar** is added for you, which provide more area for displaying possible modules. You can enable *(it is default enable)* this feature by simply config:
 
@@ -188,7 +188,7 @@ sidebar-about-description: "your description here"
 sidebar-avatar: /img/avatar-hux.jpg     # use absolute URL.
 ```
 
-We default support *[Featured Tags](#featured-tags)*, *[Mini About Me](#mini-about-me)* and *[Friends](#friends)* these three modules and you can add your own. The sidebar is naturally responsive and would be push to bottom in a small screen size (`<= 992px`, according to [Bootstarp Grid System](http://getbootstrap.com/css/#grid))  
+We default support *[Featured Tags](#featured-tags)*, *[Mini About Me](#mini-about-me)* and *[Friends](#friends)* these three modules and you can add your own. The sidebar is naturally responsive and would be push to bottom in a small screen size (`<= 992px`, according to [Bootstarp Grid System](http://getbootstrap.com/css/#grid))
 More details of these three separate modules are talking below.
 
 #### Mini About Me
@@ -199,22 +199,22 @@ It is really nice-looking and well-designed. It would be hidden in a small scree
 
 #### Featured Tags
 
-Considering the Featured-Tags feature in [Medium](http://medium.com) is pretty cool, so I add it in my blog theme also.   
+Considering the Featured-Tags feature in [Medium](http://medium.com) is pretty cool, so I add it in my blog theme also.
 This module is independent of sidebar from V1.4, so it can definitely live without enable sidebar, which would be displayed in the bottom when `sidebar` set to false, and it is not only displayed in home page but also every post page bottom.
 
 
 ```
 # Featured Tags
-featured-tags: true  
+featured-tags: true
 featured-condition-size: 1     # A tag will be featured if the size of it is more than this condition value
 ```
 
-The only one thing need to be paid attention to is the `featured-condition-size`: A tag will be featured if the size of it is more than this condition value.  
+The only one thing need to be paid attention to is the `featured-condition-size`: A tag will be featured if the size of it is more than this condition value.
 Internally, a condition template `{% if tag[1].size > {{site.featured-condition-size}} %}` is used to do the filter.
 
 #### Friends
 
-Friends is a very common feature of a blog seeing the SEO, so I add it in V1.1 release to help that.   
+Friends is a very common feature of a blog seeing the SEO, so I add it in V1.1 release to help that.
 Friends can also live without enable sidebar, also be displayed in the bottom when sidebar unable, and be displayed in every post page bottom.
 
 
@@ -237,7 +237,7 @@ friends: [
 
 #### Keynote Layout
 
-![](http://huangxuan.me/img/blog-keynote.jpg)
+![](http://suniceman.top/img/blog-keynote.jpg)
 
 There is a increasing tendency to use Open Web technology to create keynotes, presentations, like Reveal.js, Impress.js, Slides, Prezi etc. I consider a modern blog should have abilities to post these HTML based presentation easily also abilities to play it directly.
 
@@ -246,7 +246,7 @@ Under the hood, a `iframe` is used to include webpage from outer source, so the 
 ```
 ---
 layout:     keynote
-iframe:     "http://huangxuan.me/js-module-7day/"
+iframe:     "http://suniceman.top/js-module-7day/"
 ---
 ```
 
@@ -283,7 +283,7 @@ ba_track_id: 4cc1f2d8f3067386cc5cdb626a202900
 
 # Google Analytics
 ga_track_id: 'UA-49627206-1'            # Format: UA-xxxxxx-xx
-ga_domain: huangxuan.me
+ga_domain: suniceman.top
 ```
 
 Just checkout the code offered by Google/Baidu, and copy paste here, all the rest is already done for you.
@@ -341,7 +341,7 @@ This theme uses the default code syntax highlighter of jekyll, "rouge, which is 
 Executing this command to install this plugin:
 
 ```
-$ gem install jekyll-paginate 
+$ gem install jekyll-paginate
 ```
 
 This blog started in Jekyll 2 time when `jekyll-paginate` is standard. With Jekyll 3, it's a plugin we included in `_config.yml`.
