@@ -200,6 +200,4 @@ JavaScript 的压缩混淆、Less 的编译、Apache 2.0 许可通告的添加�
 ## 致谢
 
 1. 这个模板是从这里[IronSummitMedia/startbootstrap-clean-blog-jekyll](https://github.com/IronSummitMedia/startbootstrap-clean-blog-jekyll)  fork 的。 感谢这个作者
-2. 感谢[@BrucZhaoR](https://github.com/BruceZhaoR)的中文翻译
-
-3. 感谢 Jekyll、Github Pages 和 Bootstrap!
+2. 感谢 Jekyll、Github Pages 和 Bootstrap!
