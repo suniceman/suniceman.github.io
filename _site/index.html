@@ -215,6 +215,37 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/01/19/JVM%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/">
+        <h2 class="post-title">
+            JVM性能调优
+        </h2>
+        
+        <div class="post-content-preview">
+            
+                前言
+
+
+JVM内存模型及垃圾收集算法
+
+
+  根据Java虚拟机规范，JVM将内存划分为：
+    
+      New（年轻代）
+      Tenured（年老代）
+      永久代（Perm）
+    
+
+    其中New和Tenured属于堆内存，堆内存会从JVM启动参数（-Xmx:3G）指定的内存中分配，Perm不属于堆内存，有虚拟机直接分配，但可以通过-XX:PermSiz...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on January 19, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/11/30/mongodb%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE/">
         <h2 class="post-title">
             mongodb删除重复数据
@@ -256,6 +287,36 @@
     </a>
     <p class="post-meta">
         Posted by Silence on November 30, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/28/Nginx%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84%E5%8E%9F%E7%90%86/">
+        <h2 class="post-title">
+            Nginx实现高并发的原理
+        </h2>
+        
+        <div class="post-content-preview">
+            
+                前言
+
+首先要明白，Nginx 采用的是多进程（单线程） &amp; 多路IO复用模型。使用了 I/O 多路复用技术的 Nginx，就成了”并发事件驱动“的服务器。
+
+异步非阻塞（AIO）的详解 AIO
+
+
+
+多进程工作模式
+
+
+  Nginx 在启动后，会有一个 master 进程和多个相互独立的 worker 进程。
+  接收来自外界的信号，向各worker进程发送信号，每个进程都有可能...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on October 28, 2018
     </p>
 </div>
 <hr>
@@ -337,7 +398,7 @@ MySQL凭借着出色的性能、低廉的成本、丰富的资源，已经成为
 <div class="post-preview">
     <a href="/2018/07/25/ElasticSearch/">
         <h2 class="post-title">
-            ElasticSearch 安装
+            全文搜索引擎 Elasticsearch 入门
         </h2>
         
         <h3 class="post-subtitle">
@@ -374,6 +435,66 @@ cd elasticsearch-2.4.6
     </a>
     <p class="post-meta">
         Posted by Silence on July 25, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/04/21/MongoDB%E7%B4%A2%E5%BC%95%E7%AE%A1%E7%90%86/">
+        <h2 class="post-title">
+            MongoDB索引管理
+        </h2>
+        
+        <h3 class="post-subtitle">
+            创建索引，查看索引，删除索引，重建索引
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                创建索引
+
+mongodb使用 ` createIndex() ` 和 ` ensureIndex() 方法来创建索引，前者用于3.0及以上版本，后者用于3.0以下版本。
+语法：  db.COLLECTION_NAME.ensureIndex(keys[,options]) `
+
+keys:要建立索引的参数列表。如：{KEY:1}，其中key表示字段名，1表示升序排序，也可使用使用数字-1降...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on April 21, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2017/09/20/Docker%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5/">
+        <h2 class="post-title">
+            Docker 学习与实践
+        </h2>
+        
+        <div class="post-content-preview">
+            
+                前言
+1
+`To Do`
+
+
+备注
+1
+2
+3
+4
+5
+    docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+
+    docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+
+    docker images|grep none...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Silence on September 20, 2017
     </p>
 </div>
 <hr>
@@ -432,119 +553,6 @@ cd elasticsearch-2.4.6
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2017/06/20/yii2-%E6%B7%BB%E5%8A%A0%E6%A8%A1%E5%9D%97/">
-        <h2 class="post-title">
-            Yii2 添加模块
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Yii2基本应用程序模板
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                新建模块相关目录与文件
-
-
-  首先在根目录下新建modules目录，然后在该目录下面添加模块目录。假设我们这里需要加入用户模块，我们可将该目录命名为user，然后再在user目录下，分别添加models、views和controllers等三个目录。如下图所示：
-
-
-
-加入模块类文件
-
-
-  我们可以将该类文件叫做Module.php, 注意， 该类需要继承\yii\base\Module...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Silence on June 20, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/06/20/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">
-        <h2 class="post-title">
-            线程的基本概念
-        </h2>
-        
-        <h3 class="post-subtitle">
-            如果说，在操作系统中引入进程的目的，是为了使多个程序能并发执行，以提高资源利用率和系统吞吐量，那么，在操作系统中再引入线程，则是为了减少程序在并发执行时所付出的时空开销，使 OS 具有更好的并发性。
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                线程的引入
-
-如果说，在操作系统中引入进程的目的，是为了使多个程序能并发执行，以提高资源利用率和系统吞吐量，那么，在操作系统中再引入线程，则是为了减少程序在并发执行时所付出的时空开销，使 OS 具有更好的并发性。
-
-由于进程是一个资源的拥有者，因而在创建、撤消和切换中，系统必须为之付出较大的时空开销。线程作为调度和分派的基本单位。
-
-线程与进程的比较
-
-线程具有许多传统进程所具有的特征，所以...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Silence on June 20, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/06/18/webpack/">
-        <h2 class="post-title">
-            Webpack
-        </h2>
-        
-        <h3 class="post-subtitle">
-            webpack 是一个模块打包器(module bundler)。打包器(bundler)帮助您取得准备用于部署的 JavaScript 和样式表，将它们转换为适合浏览器的可用格式。
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                介绍
-首先我们要消除一个常见的误解。webpack 是一个模块打包器(module bundler)（例如，Browserify 或 Brunch）。它不是一个任务执行器(task runner)（例如，Make, Grunt 或者 Gulp ）。任务执行器就是用来自动化处理常见的开发任务，例如项目的检查(lint)、构建(build)、测试(test)。相对于打包器(bundler)，任务...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Silence on June 18, 2017
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/05/22/grunt/">
-        <h2 class="post-title">
-            Grunt
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Grunt是一个基于NodeJS，可用于自动化构建、测试、生成文档的项目管理工具
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                简介
-
-Grunt是一个基于NodeJS，可用于自动化构建、测试、生成文档的项目管理工具。
-
-Grunt 能做什么
-
-Grunt可以自动化我们的整个开发流程，简单地说，就是用JavaScript去执行一些程序来完成一些任务。比如说将css、Javascript、图像等资源压缩；将Sass和Less通过预处理器编译成Css；将Coffeescript、Typescript等转化为Javascr...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Silence on May 22, 2017
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -581,20 +589,25 @@ Grunt可以自动化我们的整个开发流程，简单地说，就是用JavaSc
         </a>
         
         
-                <a data-sort="0012" 
+                <a data-sort="0017" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="2">Java</a>
+        
+                <a data-sort="0014" 
+                    href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
+                    title="数据库"
+                    rel="5">数据库</a>
+        
+                <a data-sort="0016" 
                     href="/archive/?tag=Javascript"
                     title="Javascript"
                     rel="3">Javascript</a>
         
-                <a data-sort="0011" 
-                    href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
-                    title="数据库"
-                    rel="4">数据库</a>
-        
-                <a data-sort="0013" 
+                <a data-sort="0016" 
                     href="/archive/?tag=mongodb"
                     title="mongodb"
-                    rel="2">mongodb
+                    rel="3">mongodb
     </div>
 </section>
 
@@ -670,7 +683,7 @@ Grunt可以自动化我们的整个开发流程，简单地说，就是用JavaSc
 <h5>FRIENDS</h5>
 <ul class="list-inline">
   
-  <li><a href="https://suniceman.github.io">Suniceman</a></li>
+  <li><a href="http://suniceman.github.io">Suniceman</a></li>
   
 </ul>
 
@@ -739,7 +752,7 @@ Grunt可以自动化我们的整个开发流程，简单地说，就是用JavaSc
 </ul>
 
                 <p class="copyright text-muted">
-                    Copyright &copy; Suniceman Blog 2018
+                    Copyright &copy; Suniceman Blog 2019
                     <br>
                     Powered by <a href="http://suniceman.github.io">Suniceman Blog</a> |
                     <iframe
