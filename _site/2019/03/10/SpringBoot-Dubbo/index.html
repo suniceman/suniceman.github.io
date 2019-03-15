@@ -11,31 +11,31 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="Hello World - Suniceman | Silence Su">
+    <meta property="og:title" content="SpringBoot+Dubbo 搭建一个简单的分布式服务 - Suniceman | Silence Su">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="
-  “Yeah It’s on. ”
-
+    <meta property="og:description" content="使用 SpringBoot+Dubbo 搭建一个简单分布式服务
 
 ">
     
-    <meta property="article:published_time" content="2017-04-10T20:00:00Z">
+    <meta property="article:published_time" content="2019-03-10T20:00:00Z">
     
     
     <meta property="article:author" content="Silence">
     
     
-    <meta property="article:tag" content="Blog">
+    <meta property="article:tag" content="Java">
     
-    <meta property="article:tag" content="Meta">
+    <meta property="article:tag" content="Spring Boot">
+    
+    <meta property="article:tag" content="Dubbo">
     
     
     <meta property="og:image" content="http://localhost:4000/img/avatar-hux-ny.jpg">
-    <meta property="og:url" content="http://localhost:4000/2017/04/10/hello-world/">
+    <meta property="og:url" content="http://localhost:4000/2019/03/10/SpringBoot-Dubbo/">
     <meta property="og:site_name" content="Suniceman | Silence Su">
     
-    <title>Hello World - Suniceman | Silence Su</title>
+    <title>SpringBoot+Dubbo 搭建一个简单的分布式服务 - Suniceman | Silence Su</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2017/04/10/hello-world/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/10/SpringBoot-Dubbo/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -194,7 +194,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.jpg" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-2017.jpg" width="0" height="0"> -->
+<!-- <img src="/img/640.jpeg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -203,7 +203,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-2017.jpg');
+        background-image: url('/img/640.jpeg');
         background: ;
     }
 
@@ -220,15 +220,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=Blog" title="Blog">Blog</a>
+                        <a class="tag" href="/archive/?tag=Java" title="Java">Java</a>
                         
-                        <a class="tag" href="/archive/?tag=Meta" title="Meta">Meta</a>
+                        <a class="tag" href="/archive/?tag=Spring+Boot" title="Spring Boot">Spring Boot</a>
+                        
+                        <a class="tag" href="/archive/?tag=Dubbo" title="Dubbo">Dubbo</a>
                         
                     </div>
-                    <h1>Hello World</h1>
+                    <h1>SpringBoot+Dubbo 搭建一个简单的分布式服务</h1>
                     
-                    <h2 class="subheading"> "Hello World, Hello Blog"</h2>
-                    <span class="meta">Posted by Silence on April 10, 2017</span>
+                    <h2 class="subheading">分布式服务</h2>
+                    <span class="meta">Posted by Silence on March 10, 2019</span>
                 </div>
             </div>
         </div>
@@ -254,75 +256,204 @@
                 <!-- Multi-Lingual -->
                 
 
-				<blockquote>
-  <p>“Yeah It’s on. ”</p>
-</blockquote>
+				<h2 id="使用-springbootdubbo-搭建一个简单分布式服务">使用 SpringBoot+Dubbo 搭建一个简单分布式服务</h2>
 
-<h2 id="前言">前言</h2>
+<h3 id="实战之前先来看几个重要的概念">实战之前，先来看几个重要的概念</h3>
 
-<p>Suniceman Blog 就这么开通了。</p>
+<p>开始实战之前，我们先来简单的了解一下这样几个概念：Dubbo、RPC、分布式、由于本文的目的是带大家使用SpringBoot+Dubbo 搭建一个简单的分布式服务，所以这些概念我只会简单给大家普及一下，不会做深入探究。</p>
 
-<p><a href="#build">跳过废话，直接看技术实现 </a></p>
+<h3 id="什么是分布式">什么是分布式?</h3>
 
-<p>2017 Silence Su总算有个地方可以好好写点东西了。</p>
+<p>分布式或者说 SOA 分布式重要的就是面向服务，说简单的分布式就是我们把整个系统拆分成不同的服务然后将这些服务放在不同的服务器上减轻单体服务的压力提高并发量和性能。比如电商系统可以简单地拆分成订单系统、商品系统、登录系统等等。</p>
 
-<p>作为一个程序员， Blog 这种轮子要是挂在大众博客程序上就太没意思了。一是觉得大部分 Blog 服务都太丑，二是觉得不能随便定制不好玩。之前因为太懒没有折腾，结果就一直连个写 Blog 的地儿都没有。</p>
+<p><strong>我们可以使用 Dubbo作为分布式系统的桥梁，那么什么是 Dubbo 呢？</strong></p>
 
-<p id="build"></p>
-<hr />
+<h3 id="什么是-duboo">什么是 Duboo？</h3>
 
-<h2 id="正文">正文</h2>
+<table>
+  <tbody>
+    <tr>
+      <td>Apache Dubbo (incubating)</td>
+      <td>ˈdʌbəʊ</td>
+      <td>是一款高性能、轻量级的开源Java RPC 框架，它提供了三大核心能力：面向接口的远程方法调用，智能容错和负载均衡，以及服务自动注册和发现。简单来说 Dubbo 是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>接下来说说搭建这个博客的技术细节。</p>
+<p>Dubbo 目前已经有接近 23k 的 Star ，<a href="https://github.com/apache/incubator-dubbo">Dubbo</a>。另外，在开源中国举行的2018年度最受欢迎中国开源软件这个活动的评选中，Dubbo 更是凭借其超高人气仅次于 vue.js 和 ECharts 获得第三名的好成绩。</p>
 
-<p>正好之前就有关注过 <a href="https://pages.github.com/">GitHub Pages</a> + <a href="http://jekyllrb.com/">Jekyll</a> 快速 Building Blog 的技术方案，非常轻松时尚。</p>
+<p>Dubbo 是由阿里开源，后来加入了 Apache 。正式由于 Dubbo 的出现，才使得越来越多的公司开始使用以及接受分布式架构。</p>
 
-<p>其优点非常明显：</p>
+<h4 id="下面我们简单地来看一下-dubbo-的架构加深对-dubbo-的理解">下面我们简单地来看一下 Dubbo 的架构，加深对 Dubbo 的理解。</h4>
+
+<h3 id="dubbo-架构">Dubbo 架构</h3>
+
+<p>下面我们再来看看 Dubbo 的架构，我们后面会使用 zookeeper 作为注册中心，这也是 Dubbo 官方推荐的一种方式。</p>
+
+<p><img src="/img/dubbo.jpeg" alt="Dubbo架构" /></p>
+
+<p><strong>上述节点简单说明：</strong></p>
 
 <ul>
-  <li><strong>Markdown</strong> 带来的优雅写作体验</li>
-  <li>非常熟悉的 Git workflow ，<strong>Git Commit 即 Blog Post</strong></li>
-  <li>利用 GitHub Pages 的域名和免费无限空间，不用自己折腾主机
-    <ul>
-      <li>如果需要自定义域名，也只需要简单改改 DNS 加个 CNAME 就好了</li>
-    </ul>
-  </li>
-  <li>Jekyll 的自定制非常容易，基本就是个模版引擎</li>
+  <li>Provider 暴露服务的服务提供方</li>
+  <li>Consumer 调用远程服务的服务消费方</li>
+  <li>Registry 服务注册与发现的注册中心</li>
+  <li>Monitor 统计服务的调用次数和调用时间的监控中心</li>
+  <li>Container 服务运行容器</li>
 </ul>
 
-<p>果断开 Chrome DevTool 查了下网络请求，原来是 <strong>pending 在了 Google Fonts</strong> 上，页面渲染一直被阻塞到请求超时为止，难怪这么慢。
-忍痛割爱，只好把 Web Fonts 去了（反正超时看到的也只能是 fallback ），果然一下就正常了，而且 GitHub 和 GitCafe 对比并没有感受到明显的速度差异，虽然 github 的 ping 值明显要高一些，达到了 300ms，于是用 DNSPOD 优化了一下速度。</p>
+<p><strong>调用关系说明：</strong></p>
 
-<hr />
+<ol>
+  <li>
+    <p>服务容器负责启动，加载，运行服务提供者。</p>
+  </li>
+  <li>
+    <p>服务提供者在启动时，向注册中心注册自己提供的服务。</p>
+  </li>
+  <li>
+    <p>服务消费者在启动时，向注册中心订阅自己所需的服务。</p>
+  </li>
+  <li>
+    <p>注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</p>
+  </li>
+  <li>
+    <p>服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</p>
+  </li>
+  <li>
+    <p>服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</p>
+  </li>
+</ol>
 
-<p>配置的过程中也没遇到什么坑，基本就是 Git 的流程，相当顺手</p>
+<p><strong>我们在讲 Dubbo 的时候提到了 Dubbo 实际上是一款 RPC 框架，那么RPC 究竟是什么呢？相信看了下面我对 RPC 的介绍你就明白了！</strong></p>
 
-<p>大的 Jekyll 主题上直接 fork 了 Clean Blog（这个主题也相当有名，就不多赘述了。唯一的缺点大概就是没有标签支持，于是我给它补上了。）</p>
+<h3 id="什么是-rpc">什么是 RPC？</h3>
 
-<p>本地调试环境需要 <code class="highlighter-rouge">gem install jekyll</code>，结果 rubygem 的源居然被墙了……后来手动改成了我大淘宝的镜像源才成功</p>
+<p>RPC（Remote Procedure Call）—远程过程调用，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。比如两个不同的服务A,B部署在两台不同的机器上，那么服务 A 如果想要调用服务 B 中的某个方法该怎么办呢？使用 HTTP请求 当然可以，但是可能会比较慢而且一些优化做的并不好。 RPC 的出现就是为了解决这个问题。</p>
 
-<p>Theme 的 CSS 是基于 Bootstrap 定制的，看得不爽的地方直接在 Less 里改就好了（平时更习惯 SCSS 些），<strong>不过其实我一直觉得 Bootstrap 在移动端的体验做得相当一般，比我在淘宝参与的团队 CSS 框架差多了……</strong>所以为了体验，也补了不少 CSS 进去</p>
+<h3 id="为什么要用-dubbo">为什么要用 Dubbo？</h3>
 
-<p>最后就进入了耗时反而最长的<strong>做图、写字</strong>阶段，也算是进入了<strong>写博客</strong>的正轨，因为是类似 Hack Day 的方式去搭这个站的，所以折腾折腾着大半夜就过去了。</p>
+<p>如果你要开发分布式程序，你也可以直接基于 HTTP 接口进行通信，但是为什么要用 Dubbo呢？</p>
 
-<p>第二天考虑中文字体的渲染，fork 了 <a href="http://www.typeisbeautiful.com/">Type is Beautiful</a> 的 <code class="highlighter-rouge">font</code> CSS，调整了字号，适配了 Win 的渣渲染，中英文混排效果好多了。</p>
+<p>我觉得主要可以从 Dubbo 提供的下面四点特性来说为什么要用 Dubbo：</p>
 
-<h2 id="后记">后记</h2>
+<ol>
+  <li>
+    <p><strong>负载均衡</strong>——同一个服务部署在不同的机器时该调用那一台机器上的服务</p>
+  </li>
+  <li>
+    <p><strong>服务调用链路生成</strong>——服务之间互相是如何调用的</p>
+  </li>
+  <li>
+    <p><strong>服务访问压力以及时长统计</strong>——当前系统的压力主要在哪里，如何来扩容和优化</p>
+  </li>
+  <li>
+    <p><strong>服务降级</strong>——某个服务挂掉之后调用备用服务</p>
+  </li>
+</ol>
 
-<p>回顾这个博客的诞生，纯粹是出于个人兴趣。 用于记录工作、生活过程中的打怪升级之路。</p>
+<h3 id="开始实战-1-zookeeper-环境安装搭建">开始实战 1 ：zookeeper 环境安装搭建</h3>
 
+<h4 id="1-下载">1. 下载</h4>
+
+<p>通过 <a href="http://mirror.bit.edu.cn/apache/zookeeper/">zookeeper</a>下载，然后上传到Linux上。</p>
+
+<p><img src="/img/zookeeper.png" alt="zookeeper下载" /></p>
+
+<p>或直接使用 <code class="highlighter-rouge">wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.13/zookeeper-3.4.13.tar.gz</code> 命令下载（版本号 3.4.13 是我写这篇文章的时候最新的稳定版本，各位可以根据实际情况修改）</p>
+
+<h4 id="2-解压">2. 解压</h4>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">tar</span> <span class="nt">-zxvf</span> zookeeper-3.4.13-alpha.tar.gz
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/img/69553556.png" alt="解压之后" /></p>
+
+<p>解压完毕之后修改一下解压之后所得的文件夹名</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">mv </span>zookeeper-3.4.13 zookeeper
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>删除 zookeeper 安装包</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">rm</span> <span class="nt">-rf</span> zookeeper-3.4.13.tar.gz
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="3-进入zookeeper目录创建data文件夹">3. 进入zookeeper目录，创建data文件夹。</h4>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">mkdir </span>data
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>进入  data 文件夹 然后执行<code class="highlighter-rouge">pwd</code>命令，复制所得的当前目录位置</p>
+
+<p><img src="/img/88358291.png" alt="进入  data 文件夹 然后执行pwd命令" /></p>
+
+<h4 id="4--进入zookeeperconf目录下复制zoo_samplecfg命名为zoocfg">4.  进入/zookeeper/conf目录下，复制zoo_sample.cfg，命名为zoo.cfg</h4>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">cp </span>zoo_sample.cfg zoo.cfg
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="5-修改配置文件">5. 修改配置文件</h4>
+
+<p>使用 <code class="highlighter-rouge">vim zoo.cfg</code> 命令修改配置文件</p>
+
+<p>修改配置文件中的 data 属性:</p>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">dataDir</span>=/<span class="n">home</span>/<span class="n">yt00718</span>/<span class="n">Documents</span>/<span class="n">tools</span>/<span class="n">zookeeper</span>/<span class="n">data</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="6-启动测试">6. 启动测试</h4>
+
+<p>进入 /zookeeper/bin 目录然后执行下面的命令</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>./zkServer.sh start
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>执行 <code class="highlighter-rouge">./zkServer.sh status</code> 查看当前 zookeeper 状态。</p>
+
+<p>或者运行 <code class="highlighter-rouge">netstat   -lntup</code> 命令查看网络状态,可以看到 zookeeper 的端口号 2181 已经被占用</p>
+
+<p><img src="/img/91151305.png" alt="运行 netstat   -lntup命令查看网络状态" /></p>
+
+<h3 id="开始实战-2-实现服务接口-dubbo-interface">开始实战 2 ：实现服务接口 dubbo-interface</h3>
+
+<p>主要分为下面几步：</p>
+
+<ol>
+  <li>
+    <p>创建 Maven 项目;</p>
+  </li>
+  <li>
+    <p>创建接口类</p>
+  </li>
+  <li>
+    <p>将项目打成 jar 包供其他项目使用</p>
+  </li>
+</ol>
+
+<p>项目结构：</p>
+
+<p><img src="/img/96213.png" alt="dubbo-interface项目结构" /></p>
+
+<p>dubbo-interface 后面被打成 jar 包，它的作用只是提供接口。</p>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2017/04/10/markdown-syntax/" data-toggle="tooltip" data-placement="top" title="Markdown Syntax">
-                        Next<br>
-                        <span>Markdown Syntax</span>
+                    <li class="previous">
+                        <a href="/2019/01/19/JVM%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/" data-toggle="tooltip" data-placement="top" title="JVM性能调优">
+                        Previous<br>
+                        <span>JVM性能调优</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
                 <hr style="visibility: hidden;">
@@ -431,8 +562,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "suniceman";
-    var disqus_identifier = "/2017/04/10/hello-world";
-    var disqus_url = "http://localhost:4000/2017/04/10/hello-world/";
+    var disqus_identifier = "/2019/03/10/SpringBoot-Dubbo";
+    var disqus_url = "http://localhost:4000/2019/03/10/SpringBoot-Dubbo/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
