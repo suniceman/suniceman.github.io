@@ -174,3 +174,170 @@ dataDir=/home/yt00718/Documents/tools/zookeeper/data
 ![dubbo-interface项目结构](/img/96213.png)
 
 dubbo-interface 后面被打成 jar 包，它的作用只是提供接口。
+
+### 开始实战 3 ：实现服务提供者 dubbo-provider 
+
+主要分为下面几步：
+
+1. 创建 springboot 项目;
+1. 加入 dubbo 、zookeeper以及接口的相关依赖 jar 包；
+1. 在 application.properties 配置文件中配置 dubbo 相关信息；
+1. 实现接口类;
+1. 服务提供者启动类编写
+
+项目结构：
+
+![dubbo-provider 项目结构](/img/62218555.png)
+
+#### 1. dubbo-provider 项目创建
+
+创建一个 SpringBoot 项目，注意勾选上 web 模块。
+
+#### 2. pom 文件引入相关依赖
+
+需要引入 dubbo 、zookeeper以及接口的相关依赖 jar 包。注意将本项目和 dubbo-interface 项目的 dependency 依赖的 groupId 和 artifactId 改成自己的。dubbo 整合spring boot 的 jar 包在这里找[dubbo-spring-boot-starter](https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md)。zookeeper 的 jar包在 [Maven 仓库](https://mvnrepository.com/artifact/com.101tec/zkclient) 搜索 zkclient 即可找到。
+
+```xml
+        <dependency>
+            <groupId>com.suniceman</groupId>
+            <artifactId>dubbo-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!--引入dubbo的依赖-->
+        <dependency>
+            <groupId>com.alibaba.spring.boot</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <!-- 引入zookeeper的依赖 -->
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.10</version>
+        </dependency>
+```
+
+#### 3. 在 application.properties 配置文件中配置 dubbo 相关信息
+
+配置很简单，这主要得益于 springboot 整合 dubbo 专属的`@EnableDubboConfiguration` 注解提供的 Dubbo 自动配置。
+
+```properties
+# 配置端口
+server.port=8333
+
+spring.dubbo.application.name=dubbo-provider
+spring.dubbo.application.registry=zookeeper://ip地址:2181
+```
+
+#### 4. 实现接口
+
+注意： `@Service` 注解使用的时 Dubbo 提供的而不是 Spring 提供的。另外，加了Dubbo 提供的  `@Service` 注解之后还需要加入
+
+```java
+package com.suniceman.service.impl;
+
+import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.stereotype.Component;
+import com.suniceman.service.HelloService;
+
+@Component
+@Service
+public class HelloServiceImpl implements HelloService {
+    @Override
+    public String sayHello(String name) {
+        return "Hello " + name;
+    }
+}
+
+```
+
+### 5. 服务提供者启动类编写
+
+
+注意：不要忘记加上 `@EnableDubboConfiguration` 注解开启Dubbo 的自动配置。
+
+```java
+package com.suniceman;
+
+import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+// 开启dubbo的自动配置
+@EnableDubboConfiguration
+public class DubboProviderApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DubboProviderApplication.class, args);
+    }
+}
+
+```
+
+## 开始实战 4 ：实现服务消费者 dubbo-consumer
+
+主要分为下面几步：
+
+1. 创建 springboot 项目;
+1. 加入 dubbo 、zookeeper以及接口的相关依赖 jar 包；
+1. 在 application.properties 配置文件中配置 dubbo 相关信息；
+1. 编写测试类;
+1. 服务消费者启动类编写
+1. 测试效果
+
+项目结构：
+
+![dubbo-consumer 项目结构](/img/83395424.png)
+
+
+第1，2，3 步和服务提供者的一样，这里直接从第 4 步开始。
+
+### 4. 编写一个简单 Controller 调用远程服务
+
+```java
+package com.suniceman.dubboconsumer;
+
+import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.suniceman.service.HelloService;
+
+@RestController
+public class HelloController {
+    @Reference
+    private HelloService helloService;
+
+    @RequestMapping("/hello")
+    public String hello() {
+        String hello = helloService.sayHello("world");
+        System.out.println(helloService.sayHello("Suniceman"));
+        return hello;
+    }
+}
+```
+
+### 5. 服务消费者启动类编写
+
+```java
+package com.suniceman.dubboconsumer;
+
+import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@EnableDubboConfiguration
+public class DubboConsumerApplication {
+
+    public static void main(String[] args) {
+
+        SpringApplication.run(DubboConsumerApplication.class, args);
+    }
+}
+
+```
+
+
+### 6. 测试效果
+
+浏览器访问 [http://localhost:8330/hello](http://localhost:8330/hello) 页面返回 Hello world，控制台输出 Hello Suniceman，和预期一直，使用SpringBoot+Dubbo 搭建第一个简单的分布式服务实验成功！
