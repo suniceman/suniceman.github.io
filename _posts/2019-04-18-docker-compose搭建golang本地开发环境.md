@@ -18,7 +18,7 @@ tags:
 
 目录结构
 	```
-	yin5th@yin5th:~/code/docker/compose-golang$ tree
+	root@suniceman:~/code/docker/compose-golang$ tree
 	.
 	├── docker-compose.yml
 	└── golang
